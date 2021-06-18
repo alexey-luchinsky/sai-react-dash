@@ -14,11 +14,14 @@ export default class SaiDash extends React.Component {
         switch(type) {
             case "text":
                 return <span>{data.text}</span>;
-                break;
+            case "image":
+                return (
+                    <img src={data.img_path} style={{width:"100%", height:"100%"}} alt={"Image "+data.img_path+" not found"}/>
+                );
             default:
-                return <span>Unknown dash type {type}</span>
+                return <span>Unknown dash type {type}, data={data}</span>
         }
-        return <div>Sai Dash, id={this.props.id}</div>
-    }
-};
+    };
+}
+
 
