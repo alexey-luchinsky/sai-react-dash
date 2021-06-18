@@ -35,13 +35,14 @@ export default class SaiDashboard extends React.Component {
       maxInd = Math.max(...layout.map( (el) => parseInt(el.i)))+1;
     };
     console.log("maxInd=", maxInd);
-    layout = layout.concat({i:maxInd.toString(), x:0, y:0, w:3, h:1});
     if(event.target.name === "add_text") {
       console.log("Adding text ", form_state.text_text);
+      layout = layout.concat({i:maxInd.toString(), x:0, y:0, w:3, h:1});
       elements = elements.concat({type:"text", data:{text:form_state.text_text}});
       this.setState({layout: layout, elements:elements}); 
     } else if(event.target.name === "add_image") {
       console.log("Adding image ", form_state.image_path);
+      layout = layout.concat({i:maxInd.toString(), x:0, y:0, w:3, h:3});
       elements = elements.concat({type:"image", data:{img_path:form_state.image_path}});
       this.setState({layout: layout, elements:elements}); 
     }
