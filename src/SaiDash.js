@@ -16,7 +16,10 @@ export default class SaiDash extends React.Component {
                 return <span>{data.text}</span>;
             case "image":
                 return (
-                    <img src={data.img_path} style={{width:"100%", height:"100%"}} alt={"Image "+data.img_path+" not found"}/>
+                    <img
+                        src={data.img_path}
+                        style={{width:"100%", height:"100%"}}
+                        alt={"Image "+data.img_path+" not found"}/>
                 );
             default:
                 return <span>Unknown dash type {type}, data={data}</span>
