@@ -20,13 +20,13 @@ export default class SaiDash extends React.Component {
         const data = this.props.data;
         let content = <span>Unknown dash type {type}, data={data}</span>;
         if(type==="text") {
-            content = <span>{data.text}</span>;
+            content = <span>{data}</span>;
         } else if(type==="image") {
             content = 
                 <img
-                    src={data.img_path}
+                    src={data}
                     style={{width:"100%", height:"100%"}}
-                    alt={"Image "+data.img_path+" not found"}/>;
+                    alt={"Image "+data+" not found"}/>;
         };
         return(
             <div 

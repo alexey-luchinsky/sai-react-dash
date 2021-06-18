@@ -11,8 +11,8 @@ export default class SaiDashboard extends React.Component {
     {i: "2", x: 2, y: 0, w: 5, h: 2}
     ],
     elements:[
-      {type:"image", data:{img_path:"./bgsu.png"}},
-      {type:"text", data:{text:"I am a simple dash"}},
+      {type:"image", data:"./bgsu.png"},
+      {type:"text", data:"I am a simple dash"},
       {type:"aaa", data:"aaa"}
     ]
   };
@@ -24,28 +24,30 @@ export default class SaiDashboard extends React.Component {
     this.addElement = this.addElement.bind(this);
   }
 
+
+  // Adding a new element (called from AddDashForm)
   addElement(event, form_state) {
-    console.log("Adding text element ");
-    console.log("event=", event);
-    console.log("form_state=", form_state);
+    let type = event.target.name;
+    // Adding new layout record
     let layout = this.state.layout;
-    let elements = this.state.elements;
     let maxInd=0;
-    if( elements.length>0) {
+    if( layout.length>0) {
       maxInd = Math.max(...layout.map( (el) => parseInt(el.i)))+1;
     };
-    console.log("maxInd=", maxInd);
-    if(event.target.name === "add_text") {
-      console.log("Adding text ", form_state.text_text);
+    if(type==="text") {
       layout = layout.concat({i:maxInd.toString(), x:0, y:0, w:3, h:1});
-      elements = elements.concat({type:"text", data:{text:form_state.text_text}});
-      this.setState({layout: layout, elements:elements}); 
-    } else if(event.target.name === "add_image") {
-      console.log("Adding image ", form_state.image_path);
-      layout = layout.concat({i:maxInd.toString(), x:0, y:0, w:3, h:3});
-      elements = elements.concat({type:"image", data:{img_path:form_state.image_path}});
-      this.setState({layout: layout, elements:elements}); 
     }
+    else if(type==="image") {
+      layout = layout.concat({i:maxInd.toString(), x:0, y:0, w:3, h:3});
+    } else {
+      console.log("Unknown element type ",type);
+      return;
+    };
+    // adding new element record
+    let elements = this.state.elements;
+    elements = elements.concat({type:type, data:form_state.values[type]});
+    // saving the state
+    this.setState({layout: layout, elements:elements}); 
   }
 
 

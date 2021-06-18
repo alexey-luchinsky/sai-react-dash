@@ -2,8 +2,7 @@ import React from 'react'
 
 export default class AddDashForm extends React.Component {
     state = {
-        text_text: "Enter text",
-        image_path: "./bgsu.png"
+        values:{"text":"Enter text", "image":"./bgsu.png"}
     };
     constructor(props) {
         super(props);
@@ -16,11 +15,9 @@ export default class AddDashForm extends React.Component {
     }
 
     handleChange(event) {
-        if(event.target.name === "text") {
-            this.setState({text_text:event.target.value});
-        } else if(event.target.name === "image") {
-            this.setState({image_path: event.target.value});
-        }
+        let values = this.state.values;
+        values[event.target.name] = event.target.value;
+        this.setState(values);
     };
     render() {
         return(
@@ -28,16 +25,16 @@ export default class AddDashForm extends React.Component {
                 <form>
                     <label>
                         Text:
-                        <input type="text" name="text" value={this.state.text_text} onChange={this.handleChange}/>
+                        <input type="text" name="text" value={this.state.values["text"]} onChange={this.handleChange}/>
                     </label>
-                    <input type="button" name="add_text" value="Add Text" onClick = {this.handleAdd}/>
+                    <input type="button" name="text" value="Add Text" onClick = {this.handleAdd}/>
                 </form>
                 <form>
                     <label>
                         Image:
-                        <input type="text" name="image" value={this.state.image_path} onChange={this.handleChange}/>
+                        <input type="text" name="image" value={this.state.values["image"]} onChange={this.handleChange}/>
                     </label>
-                    <input type="button" name="add_image" value="Add Text" onClick = {this.handleAdd}/>
+                    <input type="button" name="image" value="Add Text" onClick = {this.handleAdd}/>
                 </form>
             </div>
         )
