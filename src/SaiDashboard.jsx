@@ -13,10 +13,9 @@ export default class SaiDashboard extends React.Component {
     // let dash = <SaiDash id="b"/>;
     return (
       <GridLayout className="layout" layout={layout} cols={12} rowHeight={30} width={1200}>
-        <div key="1"><SaiDash id="second"/></div>
+        <div key="1"><SaiDash id="second" type="text" data={{text:"I am a simple dash"}}/></div>
         <div key="2">c</div>
-
       </GridLayout>
-    )
+    );
   }
 }

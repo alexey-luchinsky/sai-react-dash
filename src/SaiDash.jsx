@@ -9,6 +9,15 @@ export default class SaiDash extends React.Component {
         console.log("SaiDash:constructor, props=", props);
     };
     render() {
+        const type = this.props.type;
+        const data = this.props.data;
+        switch(type) {
+            case "text":
+                return <span>{data.text}</span>;
+                break;
+            default:
+                return <span>Unknown dash type {type}</span>
+        }
         return <div>Sai Dash, id={this.props.id}</div>
     }
 };
