@@ -9,10 +9,10 @@ export default class SaiDash extends React.Component {
     };
 
     handleClick = (e) => {
-        // console.log("clicked");
-        console.log(e);
+        this.props.removeElement(this.props.index);
         e.preventDefault();
     }
+
 
     render() {
         const type = this.props.type;
@@ -30,7 +30,7 @@ export default class SaiDash extends React.Component {
         return(
             <div 
             style={{width:"100%", height:"100%"}}
-            onContextMenu={this.handleClick}>
+            onContextMenu={(e) => this.handleClick(e)}>
                 {content}
                 </div>
         );

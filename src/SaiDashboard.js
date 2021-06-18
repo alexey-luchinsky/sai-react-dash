@@ -16,12 +16,36 @@ export default class SaiDashboard extends React.Component {
     ]
   };
 
+  constructor(porps) {
+    super(porps);
+    this.removeElement = this.removeElement.bind(this);
+  }
+
+  removeElement(index) {
+    console.log("Removing element #", index);
+    const layout = this.state.layout;
+    const elements = this.state.elements;
+    this.setState({
+        layout: layout.filter( (el, i) => {
+                return i !== index
+            }),
+        elements: elements.filter( (el, i) => {
+                return i !== index
+            }),
+    });
+  }
+
+
   get_elements = () => {
     const layout = this.state.layout;
     const elements = this.state.elements;
     return(
       elements.map( (el, index) => {
-        return <div key={layout[index].i}><SaiDash type={el.type} data={el.data}/></div>;
+        return(
+        <div key={layout[index].i}>
+          <SaiDash type={el.type} data={el.data} index={index} removeElement={this.removeElement}/>
+        </div>
+        );
       })
     )
   }
