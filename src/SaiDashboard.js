@@ -1,6 +1,7 @@
 import React from 'react'
 import GridLayout from 'react-grid-layout';
 import SaiDash from './SaiDash.js';
+import AddDashForm from './AddDashForm.js';
 
 export default class SaiDashboard extends React.Component {
   state = {
@@ -20,7 +21,34 @@ export default class SaiDashboard extends React.Component {
     super(porps);
     this.removeElement = this.removeElement.bind(this);
     this.handleLayoutChange = this.handleLayoutChange.bind(this);
+    this.addElement = this.addElement.bind(this);
   }
+
+  addElement(event, form_state) {
+    console.log("Adding text element ");
+    console.log("event=", event);
+    console.log("form_state=", form_state);
+    let layout = this.state.layout;
+    let elements = this.state.elements;
+    let maxInd=0;
+    if( elements.length>0) {
+      maxInd = Math.max(...layout.map( (el) => parseInt(el.i)))+1;
+    };
+    console.log("maxInd=", maxInd);
+    if(event.target.name === "add_text") {
+      console.log("Adding text ", form_state.text_text);
+      layout = layout.concat({i:maxInd.toString(), x:0, y:0, w:3, h:1});
+      elements = elements.concat({type:"text", data:{text:form_state.text_text}});
+      this.setState({layout: layout, elements:elements}); 
+    } else if(event.target.name === "add_image") {
+      console.log("Adding image ", form_state.image_path);
+      layout = layout.concat({i:maxInd.toString(), x:0, y:0, w:3, h:3});
+      elements = elements.concat({type:"image", data:{img_path:form_state.image_path}});
+      this.setState({layout: layout, elements:elements}); 
+    }
+  }
+
+
 
   removeElement(index) {
     console.log("Removing element #", index);
@@ -43,6 +71,7 @@ export default class SaiDashboard extends React.Component {
     });
   }
 
+
   get_elements = () => {
     const layout = this.state.layout;
     const elements = this.state.elements;
@@ -60,6 +89,9 @@ export default class SaiDashboard extends React.Component {
   render() {
 
     return (
+      <div>
+      <AddDashForm
+        handleAddElement = {this.addElement}/>
       <GridLayout 
         className="layout" 
         layout={this.state.layout} 
@@ -69,6 +101,7 @@ export default class SaiDashboard extends React.Component {
         onLayoutChange={this.handleLayoutChange}>
         {this.get_elements()}
       </GridLayout>
+      </div>
     );
   }
 }
