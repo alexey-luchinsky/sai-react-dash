@@ -19,6 +19,7 @@ export default class SaiDashboard extends React.Component {
   constructor(porps) {
     super(porps);
     this.removeElement = this.removeElement.bind(this);
+    this.handleLayoutChange = this.handleLayoutChange.bind(this);
   }
 
   removeElement(index) {
@@ -35,6 +36,12 @@ export default class SaiDashboard extends React.Component {
     });
   }
 
+  handleLayoutChange(layout) {
+    this.setState({
+      layout:layout,
+      elements: this.state.elements
+    });
+  }
 
   get_elements = () => {
     const layout = this.state.layout;
@@ -53,7 +60,13 @@ export default class SaiDashboard extends React.Component {
   render() {
 
     return (
-      <GridLayout className="layout" layout={this.state.layout} cols={12} rowHeight={30} width={1200}>
+      <GridLayout 
+        className="layout" 
+        layout={this.state.layout} 
+        cols={12} 
+        rowHeight={30} 
+        width={1200}
+        onLayoutChange={this.handleLayoutChange}>
         {this.get_elements()}
       </GridLayout>
     );
