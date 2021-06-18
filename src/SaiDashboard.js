@@ -24,6 +24,22 @@ export default class SaiDashboard extends React.Component {
     this.addTextElement = this.addTextElement.bind(this);
   }
 
+  addTextElement(text) {
+    console.log("Adding text element ", text);
+    const layout = this.state.layout;
+    const elements = this.state.elements;
+    let maxInd=0;
+    if( elements.length>0) {
+      maxInd = Math.max(...layout.map( (el) => parseInt(el.i)))+1;
+    };
+    console.log("maxInd=", maxInd);
+    this.setState({
+      layout: layout.concat({i:maxInd.toString(), x:0, y:0, w:3, h:1}),
+      elements: elements.concat({type:"text", data:{text:text}})
+      }); 
+  }
+
+
   removeElement(index) {
     console.log("Removing element #", index);
     const layout = this.state.layout;
@@ -45,9 +61,6 @@ export default class SaiDashboard extends React.Component {
     });
   }
 
-  addTextElement(text) {
-    console.log("Adding text element ", text);
-  }
 
   get_elements = () => {
     const layout = this.state.layout;
