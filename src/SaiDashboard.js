@@ -21,6 +21,7 @@ export default class SaiDashboard extends React.Component {
     super(porps);
     this.removeElement = this.removeElement.bind(this);
     this.handleLayoutChange = this.handleLayoutChange.bind(this);
+    this.addTextElement = this.addTextElement.bind(this);
   }
 
   removeElement(index) {
@@ -44,6 +45,10 @@ export default class SaiDashboard extends React.Component {
     });
   }
 
+  addTextElement(text) {
+    console.log("Adding text element ", text);
+  }
+
   get_elements = () => {
     const layout = this.state.layout;
     const elements = this.state.elements;
@@ -62,7 +67,8 @@ export default class SaiDashboard extends React.Component {
 
     return (
       <div>
-      <AddDashForm/>
+      <AddDashForm
+        handleAddTextElement = {this.addTextElement}/>
       <GridLayout 
         className="layout" 
         layout={this.state.layout} 
