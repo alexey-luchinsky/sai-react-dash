@@ -6,8 +6,13 @@ export default class SaiDash extends React.Component {
     }
     constructor(props) {
         super(props);
-        console.log("SaiDash:constructor, props=", props);
     };
+
+    handleClick = (e) => {
+        // console.log("clicked");
+        console.log(e);
+        e.preventDefault();
+    }
 
     render() {
         const type = this.props.type;
@@ -25,7 +30,7 @@ export default class SaiDash extends React.Component {
         return(
             <div 
             style={{width:"100%", height:"100%"}}
-            onClick={() => {console.log("clicked")}}>
+            onContextMenu={this.handleClick}>
                 {content}
                 </div>
         );
