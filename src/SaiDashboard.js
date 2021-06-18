@@ -1,6 +1,7 @@
 import React from 'react'
 import GridLayout from 'react-grid-layout';
 import SaiDash from './SaiDash.js';
+import AddDashForm from './AddDashForm.js';
 
 export default class SaiDashboard extends React.Component {
   state = {
@@ -60,6 +61,8 @@ export default class SaiDashboard extends React.Component {
   render() {
 
     return (
+      <div>
+      <AddDashForm/>
       <GridLayout 
         className="layout" 
         layout={this.state.layout} 
@@ -69,6 +72,7 @@ export default class SaiDashboard extends React.Component {
         onLayoutChange={this.handleLayoutChange}>
         {this.get_elements()}
       </GridLayout>
+      </div>
     );
   }
 }
