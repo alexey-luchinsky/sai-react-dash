@@ -1,6 +1,6 @@
 import React from 'react'
 import GridLayout from 'react-grid-layout';
-import SaiDash from './SaiDash';
+import SaiDash from './SaiDash.js';
 
 export default class SaiDashboard extends React.Component {
   render() {
