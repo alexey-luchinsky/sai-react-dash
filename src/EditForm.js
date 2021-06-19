@@ -9,7 +9,10 @@ class EditTextForm extends React.Component {
         return <form>
             <label>
                 Edut Text
-                <input type="text" value={this.props.element.data} onChange={(e) => {this.setState({data: e.target.value})}}/>
+                <input type="text" value={this.state.data} 
+                onChange={(e) => {
+                    this.setState({data: e.target.value})
+                    }}/>
             </label>
         </form>
     }
