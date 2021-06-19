@@ -1,8 +1,12 @@
 import React from 'react'
-import GridLayout from 'react-grid-layout';
 import SaiDash from './SaiDash.js';
 import AddDashForm from './AddDashForm.js';
 import { PlotlyDash} from "./PlotlyDash"
+
+import RGL, { WidthProvider } from "react-grid-layout";
+const ReactGridLayout = WidthProvider(RGL);
+
+
 
 export default class SaiDashboard extends React.Component {
   state = {
@@ -95,7 +99,7 @@ export default class SaiDashboard extends React.Component {
       <div>
       <AddDashForm
         handleAddElement = {this.addElement}/>
-      <GridLayout 
+      <ReactGridLayout 
         className="layout" 
         layout={this.state.layout} 
         cols={12} 
@@ -103,7 +107,7 @@ export default class SaiDashboard extends React.Component {
         width={1200}
         onLayoutChange={this.handleLayoutChange}>
         {this.get_elements()}
-      </GridLayout>
+      </ReactGridLayout>
       </div>
     );
   }
