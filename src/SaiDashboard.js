@@ -27,9 +27,11 @@ export default class SaiDashboard extends React.Component {
   };
 
   openEditForm(index) {
-    console.log("OpenDitForm(",index,")");
     this.setState({currentIndex:index, showEditForm:true});
-    // this.removeElement(index);
+  }
+
+  closeEditForm() {
+    this.setState({showEditForm:false});
   }
 
   constructor(porps) {
@@ -39,6 +41,7 @@ export default class SaiDashboard extends React.Component {
     this.addElement = this.addElement.bind(this);
     this.resize_event = this.resize_event.bind(this);
     this.openEditForm = this.openEditForm.bind(this);
+    this.closeEditForm = this.closeEditForm.bind(this);
   }
 
 
@@ -143,7 +146,11 @@ export default class SaiDashboard extends React.Component {
         >
         {this.get_elements()}
       </ReactGridLayout>
-      <EditForm isOpen={this.state.showEditForm} index={this.state.currentIndex}/>
+      <EditForm 
+        isOpen={this.state.showEditForm}
+        index={this.state.currentIndex}
+        removeElement = {this.removeElement}
+        closeEditForm={this.closeEditForm}/>
       </div>
     );
   }
