@@ -9,8 +9,8 @@ class SaiDash extends React.Component {
     }
 
     handleClick = (e) => {
-        if(this.props.removeElement)
-            this.props.removeElement(this.props.index);
+        if(this.props.openEditForm)
+            this.props.openEditForm(this.props.index);
         e.preventDefault();
     }
 
