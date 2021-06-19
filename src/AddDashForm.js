@@ -2,7 +2,7 @@ import React from 'react'
 
 export default class AddDashForm extends React.Component {
     state = {
-        values:{"text":"Enter text", "image":"./bgsu.png"}
+        values:{"text":"Enter text", "image":"./bgsu.png", "plotly":"./table.txt"}
     };
     constructor(props) {
         super(props);
@@ -34,8 +34,16 @@ export default class AddDashForm extends React.Component {
                         Image:
                         <input type="text" name="image" value={this.state.values["image"]} onChange={this.handleChange}/>
                     </label>
-                    <input type="button" name="image" value="Add Text" onClick = {this.handleAdd}/>
+                    <input type="button" name="image" value="Add Image" onClick = {this.handleAdd}/>
                 </form>
+                <form>
+                    <label>
+                        Plotly:
+                        <input type="text" name="plotly" value={this.state.values["plotly"]} onChange={this.handleChange}/>
+                    </label>
+                    <input type="button" name="plotly" value="Add Plotly" onClick = {this.handleAdd}/>
+                </form>
+
             </div>
         )
     }

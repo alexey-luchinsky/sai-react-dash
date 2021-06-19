@@ -1,6 +1,6 @@
 import React from 'react';
 import Plotly from 'plotly.js';
-
+const fs = require("fs");
 
 
 class SaiDash extends React.Component {
