@@ -150,6 +150,7 @@ export default class SaiDashboard extends React.Component {
         isOpen={this.state.showEditForm}
         index={this.state.currentIndex}
         removeElement = {this.removeElement}
+        element = {this.state.elements[this.state.currentIndex]}
         closeEditForm={this.closeEditForm}/>
       </div>
     );
