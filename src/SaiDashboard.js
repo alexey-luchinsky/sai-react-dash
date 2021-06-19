@@ -4,7 +4,7 @@ import AddDashForm from './AddDashForm.js';
 import EditForm from './EditForm.js';
 import RGL, { WidthProvider } from "react-grid-layout";
 const ReactGridLayout = WidthProvider(RGL);
-
+const fs = require("fs");
 
 
 export default class SaiDashboard extends React.Component {
@@ -61,6 +61,7 @@ export default class SaiDashboard extends React.Component {
 
   // Adding a new element (called from AddDashForm)
   addElement(event, form_state) {
+    console.log("addElement(",form_state);
     let type = event.target.name;
     // Adding new layout record
     let layout = this.state.layout;
@@ -68,18 +69,26 @@ export default class SaiDashboard extends React.Component {
     if( layout.length>0) {
       maxInd = Math.max(...layout.map( (el) => parseInt(el.i)))+1;
     };
+    let data_ = "unknown";
     if(type==="text") {
       layout = layout.concat({i:maxInd.toString(), x:0, y:0, w:3, h:1});
+      data_ = form_state.values[type];
     }
     else if(type==="image") {
       layout = layout.concat({i:maxInd.toString(), x:0, y:0, w:3, h:3});
+      data_ = form_state.values[type];
+    } else if(type === "plotly") {
+      layout = layout.concat({i:maxInd.toString(), x:0, y:0, w:5, h:5});
+      
+      data_ = [{x:[1,2,3,4,5,6], y:[1,2,3,3,2,1], type:"scatter"}];
+      
     } else {
       console.log("Unknown element type ",type);
       return;
     };
     // adding new element record
     let elements = this.state.elements;
-    elements = elements.concat({type:type, data:form_state.values[type]});
+    elements = elements.concat({type:type, data:data_});
     // saving the state
     this.setState({layout: layout, elements:elements}); 
   }
