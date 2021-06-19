@@ -1,7 +1,7 @@
 import React from 'react'
 import {SaiDash, resize_plotly} from './SaiDash.js';
 import AddDashForm from './AddDashForm.js';
-
+import EditForm from './EditForm.js';
 import RGL, { WidthProvider } from "react-grid-layout";
 const ReactGridLayout = WidthProvider(RGL);
 
@@ -22,12 +22,14 @@ export default class SaiDashboard extends React.Component {
         {x:[1,2,3], y:[2,1,2], type:"scatter"}
       ]}
     ],
-    showEditForm:false
+    showEditForm:false,
+    currentIndex:0
   };
 
   openEditForm(index) {
     console.log("OpenDitForm(",index,")");
-    this.removeElement(index);
+    this.setState({currentIndex:index, showEditForm:true});
+    // this.removeElement(index);
   }
 
   constructor(porps) {
@@ -141,6 +143,7 @@ export default class SaiDashboard extends React.Component {
         >
         {this.get_elements()}
       </ReactGridLayout>
+      <EditForm isOpen={this.state.showEditForm} index={this.state.currentIndex}/>
       </div>
     );
   }
