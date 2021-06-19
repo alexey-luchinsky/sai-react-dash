@@ -45,10 +45,10 @@ class SaiDash extends React.Component {
         if(this.props.type === "plotly") {
             var chartID = "gs"+this.props.index;
             // adding Plotly
-            Plotly.newPlot(chartID, 
-                [{x:[1,2,3], y:[1,2,1], type:"scatter"}],
-                {autosize: true, responsive:true, margin:{l:0, t:0, r:0, b:0}}
-            );
+            let data = [{x:[1,2,3], y:[1,2,1], type:"scatter"}];
+            let layout = {autosize: true, responsive:true, margin:{l:0, t:0, r:0, b:0}};
+            let config = {'staticPlot': true};
+            Plotly.newPlot(chartID, data, layout, config);
             // resizing it to fit rect-grid-item
             resize_plotly(chartID);
         };
