@@ -1,4 +1,3 @@
-import { throwStatement } from '@babel/types';
 import React from 'react';
 import ReactModal from 'react-modal';
 import {SaiDash} from './SaiDash';
