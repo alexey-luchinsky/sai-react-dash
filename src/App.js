@@ -1,7 +1,7 @@
 import './css/App.css';
 import SaiDashboard from "./SaiDashboard.js"
 import "./css/react-grid-layout_styles.css"
-import SaiDash from './SaiDash.js';
+import {SaiDash, resize_plotly} from './SaiDash.js';
 
 function App() {
   return (

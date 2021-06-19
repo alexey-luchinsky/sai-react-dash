@@ -1,12 +1,12 @@
 import React from 'react';
+import Plotly from 'plotly.js';
 
-export default class SaiDash extends React.Component {
+
+
+class SaiDash extends React.Component {
     static defaultProps = {
         x:0, y:0, w:1, h:1, i:0,
     }
-    constructor(props) {
-        super(props);
-    };
 
     handleClick = (e) => {
         if(this.props.removeElement)
@@ -27,15 +27,44 @@ export default class SaiDash extends React.Component {
                     src={data}
                     style={{width:"100%", height:"100%"}}
                     alt={"Image "+data+" not found"}/>;
+        } else if(type === "plotly") {
+            var chartID = "gs"+this.props.index;
+            content = <div id={chartID}></div>;
         };
         return(
             <div 
+            className = "aaa"
             style={{width:"100%", height:"100%"}}
             onContextMenu={(e) => this.handleClick(e)}>
                 {content}
                 </div>
         );
     };
-}
+
+    componentDidMount() {
+        if(this.props.type === "plotly") {
+            var chartID = "gs"+this.props.index;
+            // adding Plotly
+            let data = this.props.data;
+            let layout = {autosize: true, responsive:true, 
+                margin:{t:0, r:0}
+            };
+            let config = {'staticPlot': true};
+            Plotly.newPlot(chartID, data, layout, config);
+            // resizing it to fit rect-grid-item
+            resize_plotly(chartID);
+        };
+    }
+
+};
+
+function resize_plotly(chartID) {
+    var doc = document.getElementById(chartID).parentElement
+    Plotly.relayout(chartID, {
+      width: doc.offsetWidth,
+      height: doc.offsetHeight
+    });
+};
 
 
+export {SaiDash, resize_plotly};
