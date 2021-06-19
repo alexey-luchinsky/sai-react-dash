@@ -12,12 +12,15 @@ export default class SaiDashboard extends React.Component {
     layout:[
     {i: "0", x: 5, y: 0, w: 3, h: 2, minW: 2, maxW: 4},
     {i: "1", x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4},
-    {i: "2", x: 2, y: 0, w: 3, h: 2}
+    {i: "2", x: 2, y: 0, w: 3, h: 7}
     ],
     elements:[
       {type:"image", data:"./bgsu.png"},
       {type:"text", data:"I am a simple dash"},
-      {type:"plotly", data:"Plotly data"}
+      {type:"plotly", data:[
+        {x:[1,2,3], y:[2,2,1], type:"scatter"},
+        {x:[1,2,3], y:[2,1,2], type:"scatter"}
+      ]}
     ]
   };
 
