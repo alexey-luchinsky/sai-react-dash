@@ -14,13 +14,18 @@ export default class EditForm extends React.Component {
                 isOpen={this.props.isOpen}
                 ariaHideApp={false}
             >
-                 <div>Editing Dash # {this.props.index}</div>
-                 {preview}
-                 <button onClick={this.props.closeEditForm}>Close</button>
-                 <button onClick={() => {
-                     this.props.removeElement(this.props.index);
-                     this.props.closeEditForm();
-                 }}> Remove Element</button>
+                 <div className="row">
+                    <div className="column" style={{float:"left",width:"50%"}}>
+                        <button onClick={this.props.closeEditForm}>Close</button>
+                    </div>
+                    <div className="column" style={{float:"right",width:"50%"}}>
+                        <button onClick={() => {
+                            this.props.removeElement(this.props.index);
+                            this.props.closeEditForm();
+                        }}> Remove Element</button>
+                        {preview}
+                    </div>
+                 </div>
             </ReactModal>
         );
     }
