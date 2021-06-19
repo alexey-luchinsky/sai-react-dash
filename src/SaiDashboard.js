@@ -23,15 +23,28 @@ export default class SaiDashboard extends React.Component {
       ]}
     ],
     showEditForm:false,
-    currentIndex:0
+    currentIndex:0,
+    current_element: {type:"image", data:"./bgsu.png"}
   };
 
   openEditForm(index) {
-    this.setState({currentIndex:index, showEditForm:true});
+    console.log("openEditForm");
+    this.setState({
+      currentIndex:index, 
+      current_element: this.state.elements[index]})
+    this.setState({showEditForm:true});
   }
 
   closeEditForm() {
     this.setState({showEditForm:false});
+  }
+
+  submitForm(i, dat) {
+    console.log("EditForm submitted, i=", i," dat=", dat);
+    let elems = this.state.elements;
+    elems[i].data = dat;
+    this.setState({elements:elems});
+    this.closeEditForm();
   }
 
   constructor(porps) {
@@ -42,6 +55,7 @@ export default class SaiDashboard extends React.Component {
     this.resize_event = this.resize_event.bind(this);
     this.openEditForm = this.openEditForm.bind(this);
     this.closeEditForm = this.closeEditForm.bind(this);
+    this.submitForm = this.submitForm.bind(this);
   }
 
 
@@ -119,12 +133,6 @@ export default class SaiDashboard extends React.Component {
       resize_plotly("gs"+i);
       
     }
-    // var ch = this.children[i];
-    // if(ch._self.state.plotly_data) {
-    //     console.log("Plotly!!!");
-    //     resize_plotly(ch._self.state.i);
-    //     console.log(ch);           
-    // }
   }
 
 
@@ -150,8 +158,9 @@ export default class SaiDashboard extends React.Component {
         isOpen={this.state.showEditForm}
         index={this.state.currentIndex}
         removeElement = {this.removeElement}
-        element = {this.state.elements[this.state.currentIndex]}
-        closeEditForm={this.closeEditForm}/>
+        element = {this.state.current_element}
+        closeEditForm={this.closeEditForm}
+        submitForm={this.submitForm}/>
       </div>
     );
   }
