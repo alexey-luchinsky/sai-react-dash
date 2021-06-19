@@ -1,7 +1,6 @@
 import React from 'react'
-import SaiDash from './SaiDash.js';
+import {SaiDash, resize_plotly} from './SaiDash.js';
 import AddDashForm from './AddDashForm.js';
-import { PlotlyDash} from "./PlotlyDash"
 
 import RGL, { WidthProvider } from "react-grid-layout";
 const ReactGridLayout = WidthProvider(RGL);
@@ -13,7 +12,7 @@ export default class SaiDashboard extends React.Component {
     layout:[
     {i: "0", x: 5, y: 0, w: 3, h: 2, minW: 2, maxW: 4},
     {i: "1", x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4},
-    {i: "2", x: 2, y: 0, w: 5, h: 5}
+    {i: "2", x: 2, y: 0, w: 3, h: 2}
     ],
     elements:[
       {type:"image", data:"./bgsu.png"},
@@ -27,6 +26,7 @@ export default class SaiDashboard extends React.Component {
     this.removeElement = this.removeElement.bind(this);
     this.handleLayoutChange = this.handleLayoutChange.bind(this);
     this.addElement = this.addElement.bind(this);
+    this.resize_event = this.resize_event.bind(this);
   }
 
 
@@ -93,6 +93,24 @@ export default class SaiDashboard extends React.Component {
     )
   }
 
+  resize_event(layout, oldLayoutItem, layoutItem, placeholder) {
+    console.log("onResize: layoutImem=",layoutItem.i);
+    // console.log("Index:", layout.indexOf(layoutItem));
+    var i=layout.indexOf(layoutItem);
+    if( this.state.elements[i].type === "plotly") {
+      console.log("Resizing Plotly #",i);
+      resize_plotly("gs"+i);
+      
+    }
+    // var ch = this.children[i];
+    // if(ch._self.state.plotly_data) {
+    //     console.log("Plotly!!!");
+    //     resize_plotly(ch._self.state.i);
+    //     console.log(ch);           
+    // }
+  }
+
+
   render() {
 
     return (
@@ -105,7 +123,10 @@ export default class SaiDashboard extends React.Component {
         cols={12} 
         rowHeight={30} 
         width={1200}
-        onLayoutChange={this.handleLayoutChange}>
+        onResize={this.resize_event}
+        onResizeStop={this.resize_event}
+        onLayoutChange={this.handleLayoutChange}
+        >
         {this.get_elements()}
       </ReactGridLayout>
       </div>
