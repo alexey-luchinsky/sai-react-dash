@@ -1,7 +1,7 @@
 import React from 'react'
 import {SaiDash, resize_plotly} from './SaiDash.js';
 import AddDashForm from './AddDashForm.js';
-
+import EditForm from './EditForm.js';
 import RGL, { WidthProvider } from "react-grid-layout";
 const ReactGridLayout = WidthProvider(RGL);
 
@@ -21,8 +21,18 @@ export default class SaiDashboard extends React.Component {
         {x:[1,2,3], y:[2,2,1], type:"scatter"},
         {x:[1,2,3], y:[2,1,2], type:"scatter"}
       ]}
-    ]
+    ],
+    showEditForm:false,
+    currentIndex:0
   };
+
+  openEditForm(index) {
+    this.setState({currentIndex:index, showEditForm:true});
+  }
+
+  closeEditForm() {
+    this.setState({showEditForm:false});
+  }
 
   constructor(porps) {
     super(porps);
@@ -30,6 +40,8 @@ export default class SaiDashboard extends React.Component {
     this.handleLayoutChange = this.handleLayoutChange.bind(this);
     this.addElement = this.addElement.bind(this);
     this.resize_event = this.resize_event.bind(this);
+    this.openEditForm = this.openEditForm.bind(this);
+    this.closeEditForm = this.closeEditForm.bind(this);
   }
 
 
@@ -89,7 +101,9 @@ export default class SaiDashboard extends React.Component {
       elements.map( (el, index) => {
         return(
         <div key={layout[index].i}>
-          <SaiDash type={el.type} data={el.data} index={index} removeElement={this.removeElement}/>
+          <SaiDash type={el.type} data={el.data} index={index} 
+          openEditForm={this.openEditForm}
+          />
         </div>
         );
       })
@@ -132,6 +146,12 @@ export default class SaiDashboard extends React.Component {
         >
         {this.get_elements()}
       </ReactGridLayout>
+      <EditForm 
+        isOpen={this.state.showEditForm}
+        index={this.state.currentIndex}
+        removeElement = {this.removeElement}
+        element = {this.state.elements[this.state.currentIndex]}
+        closeEditForm={this.closeEditForm}/>
       </div>
     );
   }
