@@ -2,18 +2,19 @@ import React from 'react'
 import GridLayout from 'react-grid-layout';
 import SaiDash from './SaiDash.js';
 import AddDashForm from './AddDashForm.js';
+import { PlotlyDash} from "./PlotlyDash"
 
 export default class SaiDashboard extends React.Component {
   state = {
     layout:[
     {i: "0", x: 5, y: 0, w: 3, h: 2, minW: 2, maxW: 4},
     {i: "1", x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4},
-    {i: "2", x: 2, y: 0, w: 5, h: 2}
+    {i: "2", x: 2, y: 0, w: 5, h: 5}
     ],
     elements:[
       {type:"image", data:"./bgsu.png"},
       {type:"text", data:"I am a simple dash"},
-      {type:"aaa", data:"aaa"}
+      {type:"plotly", data:"Plotly data"}
     ]
   };
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import Plotly from 'plotly.js';
 
 export default class SaiDash extends React.Component {
     static defaultProps = {
@@ -27,6 +28,8 @@ export default class SaiDash extends React.Component {
                     src={data}
                     style={{width:"100%", height:"100%"}}
                     alt={"Image "+data+" not found"}/>;
+        } else if(type === "plotly") {
+            content = <div>Plotly Dash</div>
         };
         return(
             <div 
