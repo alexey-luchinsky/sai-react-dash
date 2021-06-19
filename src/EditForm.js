@@ -4,8 +4,14 @@ import ReactModal from 'react-modal';
 import {SaiDash} from './SaiDash';
 
 class EditTextForm extends React.Component {
+    state = {data: this.props.element.data}
     render() {
-        return <div>Edit Text</div>;
+        return <form>
+            <label>
+                Edut Text
+                <input type="text" value={this.props.element.data} onChange={(e) => {this.setState({data: e.target.value})}}/>
+            </label>
+        </form>
     }
 }
 
@@ -19,7 +25,7 @@ export default class EditForm extends React.Component {
             preview = <SaiDash type={element.type} data={element.data}/>;
             if(element.type === "text") {
                 console.log("edit text");
-                editPane = <EditTextForm/>
+                editPane = <EditTextForm element={this.props.element}/>
             }
             else {
                 editPane = <div>The element type {this.props.element.type} cannot be edited</div>;
