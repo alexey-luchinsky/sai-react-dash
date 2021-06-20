@@ -2,7 +2,7 @@ import React from 'react'
 import {SaiDash, resize_plotly} from './SaiDash.js';
 import AddDashForm from './AddDashForm.js';
 import EditForm from './EditForm.js';
-
+import InfoPanel from './InfoPanel.js';
 import RGL, { WidthProvider } from "react-grid-layout";
 const ReactGridLayout = WidthProvider(RGL);
 
@@ -198,6 +198,7 @@ export default class SaiDashboard extends React.Component {
       <div>
       <AddDashForm
         handleAddElement = {this.addElement}/>
+      <InfoPanel/>
       <ReactGridLayout 
         className="layout" 
         layout={this.state.layout} 
