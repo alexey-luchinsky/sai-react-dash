@@ -2,7 +2,7 @@ import React from 'react'
 import {SaiDash, resize_plotly} from './SaiDash.js';
 import AddDashForm from './AddDashForm.js';
 import EditForm from './EditForm.js';
-
+import InfoPanel from './InfoPanel.js';
 import RGL, { WidthProvider } from "react-grid-layout";
 const ReactGridLayout = WidthProvider(RGL);
 
@@ -23,7 +23,8 @@ export default class SaiDashboard extends React.Component {
     ],
     showEditForm:false,
     currentI:"0",
-    current_element: {type:"image", data:"./bgsu.png"}
+    current_element: {type:"image", data:"./bgsu.png"},
+    infoOpened:false
   };
 
   openEditForm(i) {
@@ -169,7 +170,7 @@ export default class SaiDashboard extends React.Component {
     return(
       elements.map( (el, index) => {
         return(
-        <div key={layout[index].i}>
+        <div key={el.i}>
           <SaiDash type={el.type} data={el.data}
           i={el.i}
           openEditForm={this.openEditForm}
@@ -217,6 +218,11 @@ export default class SaiDashboard extends React.Component {
         element = {this.state.current_element}
         closeEditForm={this.closeEditForm}
         submitForm={this.submitForm}/>
+      <InfoPanel
+        layout = {this.state.layout}
+        elements = {this.state.elements}
+        infoOpened = {this.state.infoOpened}
+        />
       </div>
     );
   }
