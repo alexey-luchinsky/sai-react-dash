@@ -3,9 +3,6 @@ import {SaiDash, resize_plotly} from './SaiDash.js';
 import AddDashForm from './AddDashForm.js';
 import EditForm from './EditForm.js';
 
-import CSV from "jquery-csv";
-
-
 import RGL, { WidthProvider } from "react-grid-layout";
 const ReactGridLayout = WidthProvider(RGL);
 
@@ -17,34 +14,63 @@ export default class SaiDashboard extends React.Component {
     {i: "2", x: 2, y: 0, w: 3, h: 7}
     ],
     elements:[
-      {type:"image", data:"./bgsu.png"},
-      {type:"text", data:"I am a simple dash"},
+      {type:"image", data:"./bgsu.png", i:"0"},
+      {type:"text", data:"I am a simple dash", i:"1"},
       {type:"plotly", data:[
-        {x:[1,2,3], y:[2,2,1], type:"scatter"},
-        {x:[1,2,3], y:[2,1,2], type:"scatter"}
-      ]}
+        {x:[1,2,3], y:[2,2,1], type:"scatter", mode:"markers"},
+        {x:[1,2,3], y:[2,1,2], type:"scatter", mode:"lines"}
+      ], i:"2"}
     ],
     showEditForm:false,
-    currentIndex:0,
+    currentI:"0",
     current_element: {type:"image", data:"./bgsu.png"}
   };
 
-  openEditForm(index) {
+  openEditForm(i) {
     console.log("openEditForm");
+    const index = this.search_elements_index(i);
     this.setState({
-      currentIndex:index, 
+      currentI:i, 
       current_element: this.state.elements[index]})
     this.setState({showEditForm:true});
   }
 
+  // scans for layout state and returns the index of layout with given i property
+  search_layout_index(i) {
+    const layout = this.state.layout;
+    const lay = layout.filter( (e) => e.i === i);
+    if(lay)
+      return layout.indexOf(lay[0]);
+    else {
+      console.log("failed to find layout with i=", i);
+      return -1;
+    }
+  }
+
+    // scans for elements state and returns the index of element with given i property
+    search_elements_index(i) {
+      console.log("i=",i, " i+1=", i+1)
+      const elements = this.state.elements;
+      const el = elements.filter( (e) => e.i === i);
+      if(el.length) {
+        console.log("Found element ", el);
+        return elements.indexOf(el[0]);
+      }
+      else {
+        console.log("failed to find layout with i=", i);
+        return -1;
+      }
+    }
+  
   closeEditForm() {
     this.setState({showEditForm:false});
   }
 
   submitForm(i, dat) {
-    console.log("EditForm submitted, i=", i," dat=", dat);
+    const index = this.search_elements_index(i);
+    console.log("EditForm submitted, index=", index," dat=", dat);
     let elems = this.state.elements;
-    elems[i].data = dat;
+    elems[index].data = dat;
     this.setState({elements:elems});
     this.closeEditForm();
   }
@@ -60,32 +86,21 @@ export default class SaiDashboard extends React.Component {
     this.submitForm = this.submitForm.bind(this);
   }
 
-  loadPlotly(text, index) {
+  loadPlotly(text, index, type, mode) {
     var T = text.split("\n");
     T = T.map( L => L.split(" ").map( (E) => parseInt(E)));
     T = T.filter(L => L.length >1);
     var data_ = [{
       x: T.map( (a) => a[0]),
       y: T.map( (a) => a[1]),
-      type:"scatter"
+      type:type,
+      mode:mode
     }];
     var elements = this.state.elements;
-    elements[index] = {type:"plotly", data:data_};
+    elements[index] = {type:"plotly", data:data_, i:index.toString()};
     this.setState({elements:elements});
-    
-    console.log("loadPlotly(",data_,",",index);
-    
-    //   .then( T => )
-    //   .then( res => {
-    //     console.log(res);
-    //     result.out = res
-    //   });
-    //   // .then( R => console.log(R));
+    console.log("added plotly", data_)
   }  
-
-  // readCSV(file_name) {
-  //   console.log( (await fetch('sample.txt')).text() );
-  // }
 
   // Adding a new element (called from AddDashForm)
   async addElement(event, form_state) {
@@ -93,23 +108,24 @@ export default class SaiDashboard extends React.Component {
     const type = event.target.name;
     // Adding new layout record
     let layout = this.state.layout;
-    let maxInd=0;
+    let maxI=0;
     if( layout.length>0) {
-      maxInd = Math.max(...layout.map( (el) => parseInt(el.i)))+1;
+      maxI = Math.max(...layout.map( (el) => parseInt(el.i)))+1;
     };
+    maxI = maxI.toString();
     let data_ = "unknown";
     if(type==="text") {
-      layout = layout.concat({i:maxInd.toString(), x:0, y:0, w:3, h:1});
+      layout = layout.concat({i:maxI, x:0, y:0, w:3, h:1});
       data_ = form_state.values[type];
     }
     else if(type==="image") {
-      layout = layout.concat({i:maxInd.toString(), x:0, y:0, w:3, h:3});
+      layout = layout.concat({i:maxI, x:0, y:0, w:3, h:3});
       data_ = form_state.values[type];
     } else if(type === "plotly") {
-      layout = layout.concat({i:maxInd.toString(), x:0, y:0, w:5, h:5});
-      fetch(form_state.values[type])
+      layout = layout.concat({i:maxI, x:0, y:0, w:5, h:5});
+      fetch(form_state.values[type].file_name)
         .then( r => r.text() )
-        .then( t => this.loadPlotly(t, maxInd));
+        .then( t => this.loadPlotly(t, maxI, form_state.values[type].type, form_state.values[type].mode));
       data_ = [{x:[1,2,3,4,5,6], y:[1,2,3,3,2,1], type:"scatter"}];
     } else {
       console.log("Unknown element type ",type);
@@ -117,15 +133,16 @@ export default class SaiDashboard extends React.Component {
     };
     // adding new element record
     let elements = this.state.elements;
-    elements = elements.concat({type:type, data:data_});
+    elements = elements.concat({type:type, data:data_, i:maxI});
     // saving the state
     this.setState({layout: layout, elements:elements}); 
   }
 
 
 
-  removeElement(index) {
-    console.log("Removing element #", index);
+  removeElement(i) {
+    const index = this.search_layout_index(i);
+    console.log("Removing element: i=",i, " index=", index);
     const layout = this.state.layout;
     const elements = this.state.elements;
     this.setState({
@@ -153,7 +170,8 @@ export default class SaiDashboard extends React.Component {
       elements.map( (el, index) => {
         return(
         <div key={layout[index].i}>
-          <SaiDash type={el.type} data={el.data} index={index} 
+          <SaiDash type={el.type} data={el.data}
+          i={el.i}
           openEditForm={this.openEditForm}
           />
         </div>
@@ -194,7 +212,7 @@ export default class SaiDashboard extends React.Component {
       </ReactGridLayout>
       <EditForm 
         isOpen={this.state.showEditForm}
-        index={this.state.currentIndex}
+        i={this.state.currentI}
         removeElement = {this.removeElement}
         element = {this.state.current_element}
         closeEditForm={this.closeEditForm}
