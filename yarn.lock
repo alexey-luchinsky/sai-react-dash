@@ -4447,6 +4447,11 @@
   dependencies:
     "cssom" "~0.3.6"
 
+"csv-string@^4.0.1":
+  "integrity" "sha512-nCdK+EWDbqLvZ2MmVQhHTmidMEsHbK3ncgTJb4oguNRpkmH5OOr+KkDRB4nqsVrJ7oK0AdO1QEsBp0+z7KBtGQ=="
+  "resolved" "https://registry.npmjs.org/csv-string/-/csv-string-4.0.1.tgz"
+  "version" "4.0.1"
+
 "cubic-hermite@^1.0.0":
   "integrity" "sha1-hOOy8nKzFFToOTuZu2rtRRaMFOU="
   "resolved" "https://registry.npmjs.org/cubic-hermite/-/cubic-hermite-1.0.0.tgz"
@@ -6023,6 +6028,11 @@
   "integrity" "sha1-FQStJSMVjKpA20onh8sBQRmU6k8="
   "resolved" "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   "version" "1.0.0"
+
+"fs@^0.0.1-security":
+  "integrity" "sha1-invTcYa23d84E/I4WLV+yq9eQdQ="
+  "resolved" "https://registry.npmjs.org/fs/-/fs-0.0.1-security.tgz"
+  "version" "0.0.1-security"
 
 "fsevents@^1.2.7":
   "integrity" "sha512-oWb1Z6mkHIskLzEJ/XWX0srkpkTQ7vaopMQkyaEIoq0fmtFVxOthb8cCxeT+p3ynTdkk/RZwbgG4brR5BeWECw=="
@@ -8158,6 +8168,11 @@
     "@jest/core" "^26.6.0"
     "import-local" "^3.0.2"
     "jest-cli" "^26.6.0"
+
+"jquery-csv@^1.0.21":
+  "integrity" "sha512-uDIFsJcC4xZEofK9pk3hwFQlyqf3FFwkQq6JIa882lf0pu/S0H4LqjCAEaULGM0uOcdCbGbMBh3b3LmPtF1a9A=="
+  "resolved" "https://registry.npmjs.org/jquery-csv/-/jquery-csv-1.0.21.tgz"
+  "version" "1.0.21"
 
 "js-tokens@^3.0.0 || ^4.0.0", "js-tokens@^4.0.0":
   "integrity" "sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ=="

@@ -1,4 +1,3 @@
-import { throwStatement } from '@babel/types';
 import React from 'react';
 import ReactModal from 'react-modal';
 import {SaiDash} from './SaiDash';
@@ -45,14 +44,14 @@ export default class EditForm extends React.Component {
                     <div className="column" style={{float:"left",width:"50%"}}>
                         <button 
                             onClick={(e) => {
-                                this.props.submitForm(this.props.index, this.state.data)
+                                this.props.submitForm(this.props.i, this.state.data)
                             }}> Submit </button>
                         <button onClick={this.props.closeEditForm}>Cancel</button>
                         {editPane}
                     </div>
                     <div className="column" style={{float:"right",width:"50%"}}>
                         <button onClick={() => {
-                            this.props.removeElement(this.props.index);
+                            this.props.removeElement(this.props.i);
                             this.props.closeEditForm();
                         }}> Remove Element</button>
                         {preview}
