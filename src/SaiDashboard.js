@@ -2,10 +2,12 @@ import React from 'react'
 import {SaiDash, resize_plotly} from './SaiDash.js';
 import AddDashForm from './AddDashForm.js';
 import EditForm from './EditForm.js';
+
+import CSV from "jquery-csv";
+
+
 import RGL, { WidthProvider } from "react-grid-layout";
 const ReactGridLayout = WidthProvider(RGL);
-const fs = require("fs");
-
 
 export default class SaiDashboard extends React.Component {
   state = {
@@ -58,11 +60,37 @@ export default class SaiDashboard extends React.Component {
     this.submitForm = this.submitForm.bind(this);
   }
 
+  loadPlotly(text, index) {
+    var T = text.split("\n");
+    T = T.map( L => L.split(" ").map( (E) => parseInt(E)));
+    T = T.filter(L => L.length >1);
+    var data_ = [{
+      x: T.map( (a) => a[0]),
+      y: T.map( (a) => a[1]),
+      type:"scatter"
+    }];
+    var elements = this.state.elements;
+    elements[index] = {type:"plotly", data:data_};
+    this.setState({elements:elements});
+    
+    console.log("loadPlotly(",data_,",",index);
+    
+    //   .then( T => )
+    //   .then( res => {
+    //     console.log(res);
+    //     result.out = res
+    //   });
+    //   // .then( R => console.log(R));
+  }  
+
+  // readCSV(file_name) {
+  //   console.log( (await fetch('sample.txt')).text() );
+  // }
 
   // Adding a new element (called from AddDashForm)
-  addElement(event, form_state) {
+  async addElement(event, form_state) {
     console.log("addElement(",form_state);
-    let type = event.target.name;
+    const type = event.target.name;
     // Adding new layout record
     let layout = this.state.layout;
     let maxInd=0;
@@ -79,9 +107,10 @@ export default class SaiDashboard extends React.Component {
       data_ = form_state.values[type];
     } else if(type === "plotly") {
       layout = layout.concat({i:maxInd.toString(), x:0, y:0, w:5, h:5});
-      
+      fetch(form_state.values[type])
+        .then( r => r.text() )
+        .then( t => this.loadPlotly(t, maxInd));
       data_ = [{x:[1,2,3,4,5,6], y:[1,2,3,3,2,1], type:"scatter"}];
-      
     } else {
       console.log("Unknown element type ",type);
       return;
