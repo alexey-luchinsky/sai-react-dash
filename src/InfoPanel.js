@@ -1,5 +1,7 @@
 import React from 'react'
 
 export default function InfoPanel(props) {
-    return <div style={{backgroundColor:"lavender"}}>Info Panel</div>;
+    let layout_items = props.layout.map( (el) =>
+        <li>[{el.x}, {el.y}, {el.w}, {el.h}, i={el.i}]</li>);
+    return <ul style={{backgroundColor:"lavender"}}>{layout_items}</ul>;
 };

@@ -198,7 +198,9 @@ export default class SaiDashboard extends React.Component {
       <div>
       <AddDashForm
         handleAddElement = {this.addElement}/>
-      <InfoPanel/>
+      <InfoPanel
+        layout = {this.state.layout}
+        elements = {this.state.elements}/>
       <ReactGridLayout 
         className="layout" 
         layout={this.state.layout} 
