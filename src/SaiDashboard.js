@@ -27,6 +27,10 @@ export default class SaiDashboard extends React.Component {
     infoOpened:false
   };
 
+  print_state() {
+    console.log(this.state);
+  }
+
   openEditForm(i) {
     console.log("openEditForm");
     const index = this.search_elements_index(i);
@@ -85,6 +89,7 @@ export default class SaiDashboard extends React.Component {
     this.openEditForm = this.openEditForm.bind(this);
     this.closeEditForm = this.closeEditForm.bind(this);
     this.submitForm = this.submitForm.bind(this);
+    this.print_state = this.print_state.bind(this);
   }
 
   loadPlotly(text, index, type, mode) {
@@ -197,6 +202,7 @@ export default class SaiDashboard extends React.Component {
 
     return (
       <div>
+      <button onClick={this.print_state}>Print State</button>
       <AddDashForm
         handleAddElement = {this.addElement}/>
       <ReactGridLayout 
