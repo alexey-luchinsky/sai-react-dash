@@ -92,7 +92,7 @@ export default class SaiDashboard extends React.Component {
     this.print_state = this.print_state.bind(this);
   }
 
-  loadPlotly(text, index, type, mode) {
+  loadPlotly(text, i, type, mode) {
     var T = text.split("\n");
     T = T.map( L => L.split(" ").map( (E) => parseInt(E)));
     T = T.filter(L => L.length >1);
@@ -103,7 +103,8 @@ export default class SaiDashboard extends React.Component {
       mode:mode
     }];
     var elements = this.state.elements;
-    elements[index] = {type:"plotly", data:data_, i:index.toString()};
+    var index = this.search_elements_index(i);
+    elements[index] = {type:"plotly", data:data_, i:i};
     this.setState({elements:elements});
     console.log("added plotly", data_)
   }  
@@ -128,6 +129,9 @@ export default class SaiDashboard extends React.Component {
       layout = layout.concat({i:maxI, x:0, y:0, w:3, h:3});
       data_ = form_state.values[type];
     } else if(type === "plotly") {
+      console.log("Adding plotly layout with i=", maxI, 
+        "[elements]=", this.state.elements.length,
+        "[layout]=", this.state.layout.length);
       layout = layout.concat({i:maxI, x:0, y:0, w:5, h:5});
       fetch(form_state.values[type].file_name)
         .then( r => r.text() )
@@ -209,6 +213,7 @@ export default class SaiDashboard extends React.Component {
           <button onClick={(e) => {this.setState({layout:[], elements:[]});}}>
             Clear All
           </button>
+          <label>Total #:<span> {this.state.layout.length} , {this.state.elements.length} </span></label>
         </div>
       <AddDashForm
         handleAddElement = {this.addElement}/>
