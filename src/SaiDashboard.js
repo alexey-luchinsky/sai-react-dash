@@ -204,7 +204,12 @@ export default class SaiDashboard extends React.Component {
 
     return (
       <div>
-      <button onClick={this.print_state}>Print State</button>
+        <div>
+          <button onClick={this.print_state}>Print State</button>
+          <button onClick={(e) => {this.setState({layout:[], elements:[]});}}>
+            Clear All
+          </button>
+        </div>
       <AddDashForm
         handleAddElement = {this.addElement}/>
       <ReactGridLayout 
