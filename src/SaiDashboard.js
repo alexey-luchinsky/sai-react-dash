@@ -179,6 +179,7 @@ export default class SaiDashboard extends React.Component {
           <SaiDash type={el.type} data={el.data}
           i={el.i}
           openEditForm={this.openEditForm}
+          removeElement={this.removeElement}
           />
         </div>
         );
@@ -192,7 +193,8 @@ export default class SaiDashboard extends React.Component {
     var i=layout.indexOf(layoutItem);
     if( this.state.elements[i].type === "plotly") {
       console.log("Resizing Plotly #",i);
-      resize_plotly("gs"+i);
+      
+      resize_plotly("gs"+layoutItem.i);
       
     }
   }

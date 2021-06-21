@@ -35,7 +35,11 @@ class SaiDash extends React.Component {
             <div 
             className = "aaa"
             style={{width:"100%", height:"100%"}}
-            onContextMenu={(e) => this.handleClick(e)}>
+            onContextMenu={(e) => {
+                e.preventDefault();
+                this.props.removeElement(this.props.i)
+            }}
+            onDoubleClick={(e) => this.handleClick(e)}>
                 {content}
                 </div>
         );
