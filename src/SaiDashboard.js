@@ -32,12 +32,13 @@ export default class SaiDashboard extends React.Component {
   }
 
   openEditForm(i) {
-    console.log("openEditForm");
     const index = this.search_elements_index(i);
     this.setState({
       currentI:i, 
       current_element: this.state.elements[index]})
     this.setState({showEditForm:true});
+    // store the data of the current element in the EditForm data
+    this.editFormRef.current.setState({data:this.state.elements[index].data})
   }
 
   // scans for layout state and returns the index of layout with given i property
@@ -82,6 +83,7 @@ export default class SaiDashboard extends React.Component {
 
   constructor(porps) {
     super(porps);
+    this.editFormRef = React.createRef();     // reference to the EditForm modal
     this.removeElement = this.removeElement.bind(this);
     this.handleLayoutChange = this.handleLayoutChange.bind(this);
     this.addElement = this.addElement.bind(this);
@@ -230,6 +232,7 @@ export default class SaiDashboard extends React.Component {
         {this.get_elements()}
       </ReactGridLayout>
       <EditForm 
+        ref = {this.editFormRef}
         isOpen={this.state.showEditForm}
         i={this.state.currentI}
         removeElement = {this.removeElement}
