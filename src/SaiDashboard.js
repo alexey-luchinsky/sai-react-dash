@@ -31,49 +31,66 @@ export default class SaiDashboard extends React.Component {
     console.log(this.state);
   }
 
-  openEditForm(i) {
-    const index = this.search_elements_index(i);
+  /**
+   * Opens an edit form for a selected dash
+   * @param {String} keyI --- key of the edited dash
+   */
+  openEditForm(keyI) {
+    const index = this.search_elements_index(keyI);
     this.setState({
-      currentI:i, 
+      currentI:keyI, 
       current_element: this.state.elements[index]})
     this.setState({showEditForm:true});
     // store the data of the current element in the EditForm data
     this.editFormRef.current.setState({data:this.state.elements[index].data})
   }
 
-  // scans for layout state and returns the index of layout with given i property
-  search_layout_index(i) {
+  /**
+   * Scans for position of the dash in state.layout array
+   * @param {String} keyI: the key of the dash
+   * @returns index in the array or -1 if it is not found
+   */
+  search_layout_index(keyI) {
     const layout = this.state.layout;
-    const lay = layout.filter( (e) => e.i === i);
+    const lay = layout.filter( (e) => e.i === keyI);
     if(lay)
       return layout.indexOf(lay[0]);
     else {
-      console.log("failed to find layout with i=", i);
+      console.log("failed to find layout with i=", keyI);
       return -1;
     }
   }
 
-    // scans for elements state and returns the index of element with given i property
-    search_elements_index(i) {
-      console.log("i=",i, " i+1=", i+1)
+  /**
+   * Scans for position of the dash in state.elements array
+   * @param {String} keyI: the key of the dash
+   * @returns index in the array or -1 if it is not found
+   */
+   search_elements_index(keyI) {
       const elements = this.state.elements;
-      const el = elements.filter( (e) => e.i === i);
+      const el = elements.filter( (e) => e.i === keyI);
       if(el.length) {
         console.log("Found element ", el);
         return elements.indexOf(el[0]);
       }
       else {
-        console.log("failed to find layout with i=", i);
+        console.log("failed to find layout with i=", keyI);
         return -1;
       }
     }
   
+
   closeEditForm() {
     this.setState({showEditForm:false});
   }
 
-  submitForm(i, dat) {
-    const index = this.search_elements_index(i);
+  /**
+   * Modifies the data of the elelent and closes the edit form
+   * @param {String} keyI: thkey of the modified dash
+   * @param {Array} dat: new data
+   */
+  submitForm(keyI, dat) {
+    const index = this.search_elements_index(keyI);
     console.log("EditForm submitted, index=", index," dat=", dat);
     let elems = this.state.elements;
     elems[index].data = dat;
@@ -94,19 +111,28 @@ export default class SaiDashboard extends React.Component {
     this.print_state = this.print_state.bind(this);
   }
 
-  loadPlotly(text, i, type, mode) {
-    var T = text.split("\n");
+  /**
+   * Parses the text loaded from CSV file and stores it in the plotly dash
+   * @param {String} tableText 
+   * @param {String} keyI 
+   * @param {Array} plotlyType 
+   * @param {Array} plotlyMode 
+   */
+  loadPlotly(tableText, keyI, plotlyType, plotlyMode) {
+    // parsing the text and create plotly data
+    var T = tableText.split("\n");
     T = T.map( L => L.split(" ").map( (E) => parseInt(E)));
     T = T.filter(L => L.length >1);
     var data_ = [{
       x: T.map( (a) => a[0]),
       y: T.map( (a) => a[1]),
-      type:type,
-      mode:mode
+      type:plotlyType,
+      mode:plotlyMode
     }];
+    // save it in the corresponding element and update the state
     var elements = this.state.elements;
-    var index = this.search_elements_index(i);
-    elements[index] = {type:"plotly", data:data_, i:i};
+    var index = this.search_elements_index(keyI);
+    elements[index] = {type:"plotly", data:data_, i:keyI};
     this.setState({elements:elements});
     console.log("added plotly", data_)
   }  
@@ -151,10 +177,13 @@ export default class SaiDashboard extends React.Component {
   }
 
 
-
-  removeElement(i) {
-    const index = this.search_layout_index(i);
-    console.log("Removing element: i=",i, " index=", index);
+  /**
+   * Removes the dash with the given key from the dashboard
+   * @param {String} keyI 
+   */
+  removeElement(keyI) {
+    const index = this.search_layout_index(keyI);
+    console.log("Removing element: i=",keyI, " index=", index);
     const layout = this.state.layout;
     const elements = this.state.elements;
     this.setState({
@@ -167,6 +196,10 @@ export default class SaiDashboard extends React.Component {
     });
   }
 
+  /**
+   * Updates the layout state with the change of RGL layout
+   * @param {list} layout 
+   */
   handleLayoutChange(layout) {
     this.setState({
       layout:layout,
@@ -174,7 +207,10 @@ export default class SaiDashboard extends React.Component {
     });
   }
 
-
+  /**
+   * Creates list of DOMs of the current elements
+   * @returns list of DOMs
+   */
   get_elements = () => {
     const layout = this.state.layout;
     const elements = this.state.elements;
@@ -193,21 +229,28 @@ export default class SaiDashboard extends React.Component {
     )
   }
 
+  /**
+   * If the Plotly dash is resized updates the size of the plot
+   * @param {Array} layout 
+   * @param {Array} oldLayoutItem 
+   * @param {Array} layoutItem 
+   * @param  placeholder 
+   */
   resize_event(layout, oldLayoutItem, layoutItem, placeholder) {
     console.log("onResize: layoutImem=",layoutItem.i);
     // console.log("Index:", layout.indexOf(layoutItem));
     var i=layout.indexOf(layoutItem);
     if( this.state.elements[i].type === "plotly") {
       console.log("Resizing Plotly #",i);
-      
       resize_plotly("gs"+layoutItem.i);
-      
     }
   }
 
-
+  /**
+   * Renders the dashboard
+   * @returns DOM
+   */
   render() {
-
     return (
       <div>
         <div>
