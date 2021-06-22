@@ -72,7 +72,7 @@ class SaiDash extends React.Component {
 
 /**
  * Resizes the plotly to fit into the div
- * @param {DOM id of the plot div} chartID 
+ * @param {String} chartID DOM id of the plot div
  */
 function resize_plotly(chartID) {
     var doc = document.getElementById(chartID).parentElement
