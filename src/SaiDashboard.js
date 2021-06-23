@@ -194,7 +194,7 @@ export default class SaiDashboard extends React.Component {
   
     // Adding a new element (called from AddDashForm)
     async addElement(event, form_state) {
-      console.log("addElement(",form_state);
+      console.log("addElement(",event,form_state);
       const type = event.target.name;
       const dashes = this.state.dashes;
       // Adding new layout record
@@ -207,7 +207,7 @@ export default class SaiDashboard extends React.Component {
       let metaData = "unknown", layout = {x:0, y:0, w:1, h:1};
       if( type === "text") {
         layout = {x:0, y:0, w:3, h:1};
-        metaData = {text:form_state.values["text"]};
+        metaData = form_state.values["text"];
       } else if(type === "image") {
         layout = {x:0, y:0, w:3, h:3};
         metaData = {filePath:form_state.values["image"]};
