@@ -23,6 +23,19 @@ export default class EditForm extends React.Component {
         </form>
     }
 
+    editImageForm() {
+        return <form>
+            <label>
+                File path:
+                <input type="text" value={this.state.metaData.filePath} 
+                onChange={(e) => {
+                    this.setState({metaData: {filePath:e.target.value}});
+                    }}/>
+            </label>
+        </form>
+
+    }
+
     /**
      * creates the React DOM
      * @returns React DOM
@@ -37,6 +50,10 @@ export default class EditForm extends React.Component {
             if(element.type === "text") {
                 console.log("edit text");
                 editPane = this.editTextForm();
+            }
+            else if(element.type === "image") {
+                console.log("edit image");
+                editPane = this.editImageForm();
             }
             else {
                 editPane = <div>The element type {this.props.element.type} cannot be edited</div>;
