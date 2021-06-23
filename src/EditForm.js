@@ -33,7 +33,18 @@ export default class EditForm extends React.Component {
                     }}/>
             </label>
         </form>
+    }
 
+    editPlotlyForm() {
+        return <form>
+            <label>
+                File path:
+                <input type="text" value={this.state.metaData.file_name} 
+                onChange={(e) => {
+                    this.setState({metaData: {file_name:e.target.value, layout:[], mode:[]}});
+                    }}/>
+            </label>
+        </form>
     }
 
     /**
@@ -54,6 +65,10 @@ export default class EditForm extends React.Component {
             else if(element.type === "image") {
                 console.log("edit image");
                 editPane = this.editImageForm();
+            }
+            else if(element.type === "plotly") {
+                console.log("edit plotly");
+                editPane = this.editPlotlyForm();
             }
             else {
                 editPane = <div>The element type {this.props.element.type} cannot be edited</div>;
