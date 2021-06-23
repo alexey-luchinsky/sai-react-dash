@@ -17,7 +17,7 @@ export default class EditForm extends React.Component {
                 Edit Text
                 <input type="text" value={this.state.metaData.text} 
                 onChange={(e) => {
-                    this.setState({data: e.target.value})
+                    this.setState({metaData: {text:e.target.value}});
                     }}/>
             </label>
         </form>
@@ -44,7 +44,7 @@ export default class EditForm extends React.Component {
 
         };
         let submitButton = <button 
-            onClick={(e) => {this.props.submitForm(this.props.i, this.state.data)}}> 
+            onClick={(e) => {this.props.submitForm(this.props.element.layout.i, this.state.metaData)}}> 
             Submit 
             </button>;
         let cancelButton = <button onClick={this.props.closeEditForm}>Cancel</button>;
