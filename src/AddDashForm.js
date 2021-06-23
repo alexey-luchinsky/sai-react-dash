@@ -5,7 +5,8 @@ export default class AddDashForm extends React.Component {
         values:{
             "text":{text:"Enter text"}, 
             "image":{filePath:"./bgsu.png"},
-            "plotly":{file_name:"./table.txt", type:"scatter", mode:"markers"}}
+            "plotly":{file_name:"./table.txt", layout:[], mode:[]}
+        }
     };
     constructor(props) {
         super(props);
@@ -22,6 +23,9 @@ export default class AddDashForm extends React.Component {
         }
         else if(type === "image") {
             values[type].filePath = new_val;
+        }
+        else if(type === "plotly") {
+            values[type].file_name = new_val;
         }
         this.setState(values);
     };
