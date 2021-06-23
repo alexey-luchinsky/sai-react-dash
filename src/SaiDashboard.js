@@ -80,7 +80,7 @@ export default class SaiDashboard extends React.Component {
     }
     else if(type === "plotly") {
       console.log("Reading plotly inner data from file ", metaData.filePath);
-      fetch(metaData.filePath)
+      fetch(metaData.file_name)
         .then( r => r.text())
         .then( t => this.loadPlotly(t, keyI) );
     }
