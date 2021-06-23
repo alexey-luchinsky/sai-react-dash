@@ -210,7 +210,7 @@ export default class SaiDashboard extends React.Component {
         metaData = form_state.values["text"];
       } else if(type === "image") {
         layout = {x:0, y:0, w:3, h:3};
-        metaData = {filePath:form_state.values["image"]};
+        metaData = form_state.values["image"];
       } else if(type === "plotly") {
         layout = {x:0, y:0, w:3, h:3};
         metaData = form_state.values["plotly"];

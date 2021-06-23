@@ -4,7 +4,7 @@ export default class AddDashForm extends React.Component {
     state = {
         values:{
             "text":{text:"Enter text"}, 
-            "image":"./bgsu.png", 
+            "image":{filePath:"./bgsu.png"},
             "plotly":{file_name:"./table.txt", type:"scatter", mode:"markers"}}
     };
     constructor(props) {
@@ -19,6 +19,9 @@ export default class AddDashForm extends React.Component {
             new_val = event.target.value;
         if(type === "text") {
             values[type].text = new_val;
+        }
+        else if(type === "image") {
+            values[type].filePath = new_val;
         }
         this.setState(values);
     };
@@ -44,7 +47,7 @@ export default class AddDashForm extends React.Component {
                         Image:
                         <input type="text"
                         name="image"
-                        value={this.state.values["image"]}
+                        value={this.state.values["image"].filePath}
                         onChange={this.handleChange}/>
                     </label>
                     <input type="button"
