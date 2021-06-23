@@ -5,7 +5,7 @@ import {SaiDash} from './SaiDash';
 
 export default class EditForm extends React.Component {
 
-    state={data: this.props.element.data};
+    state={metaData: this.props.element.metaData};
 
     /**
      * create a DOM to edit the text dash
@@ -15,7 +15,7 @@ export default class EditForm extends React.Component {
         return <form>
             <label>
                 Edit Text
-                <input type="text" value={this.state.data} 
+                <input type="text" value={this.state.metaData.text} 
                 onChange={(e) => {
                     this.setState({data: e.target.value})
                     }}/>
@@ -33,7 +33,7 @@ export default class EditForm extends React.Component {
         let editPane = <div>Element is empty</div> // // content of the edit pane (on the left)
         if(element) {
             // Let us fill the panes depending on element type
-            preview = <SaiDash type={element.type} data={element.data}/>;
+            preview = <SaiDash type={element.type} data={element.innerData}/>;
             if(element.type === "text") {
                 console.log("edit text");
                 editPane = this.editTextForm();

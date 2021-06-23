@@ -1,34 +1,42 @@
 import React from 'react'
-import {SaiDash, resize_plotly} from './SaiDash.js';
+import {SaiDash, resize_plotly, refreshPlotly} from './SaiDash.js';
 import AddDashForm from './AddDashForm.js';
 import EditForm from './EditForm.js';
-import InfoPanel from './InfoPanel.js';
 import RGL, { WidthProvider } from "react-grid-layout";
+import start_dashes from './start_dashes.js';
 const ReactGridLayout = WidthProvider(RGL);
 
 export default class SaiDashboard extends React.Component {
+  // state = {dashes:{
+  //          keyI:{layout,type, metaData, innerData},
+  //          ...
+  //          }
+  //    showEditForm
+  //    current_dash
+  // ]}
+  // where keyI: i field of the RGD layout
+  //        layout: RGD layout without 'i' field
+  //        type:   type of the dash ('text', 'image', 'plotly', etc)
+  //        metaData: path to image file, path to plotly table, etc. This data can be edited
+  //        innerData: the image, table for plotly, etc. This data is generated from metaData
   state = {
-    layout:[
-    {i: "0", x: 5, y: 0, w: 3, h: 2, minW: 2, maxW: 4},
-    {i: "1", x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4},
-    {i: "2", x: 2, y: 0, w: 3, h: 7}
-    ],
-    elements:[
-      {type:"image", data:"./bgsu.png", i:"0"},
-      {type:"text", data:"I am a simple dash", i:"1"},
-      {type:"plotly", data:[
-        {x:[1,2,3], y:[2,2,1], type:"scatter", mode:"markers"},
-        {x:[1,2,3], y:[2,1,2], type:"scatter", mode:"lines"}
-      ], i:"2"}
-    ],
-    showEditForm:false,
-    currentI:"0",
-    current_element: {type:"image", data:"./bgsu.png"},
-    infoOpened:false
-  };
+     dashes: start_dashes,
+     showEditForm: false,
+     current_dash: {metaData:[]}
+  }
+
 
   print_state() {
     console.log(this.state);
+  }
+
+  generate_layout = () => {
+    const dashes = this.state.dashes;
+    return Object.keys(dashes).map( K => {
+      var L = dashes[K].layout;
+      L["i"] = K;
+      return L;
+    })
   }
 
   /**
@@ -36,67 +44,49 @@ export default class SaiDashboard extends React.Component {
    * @param {String} keyI --- key of the edited dash
    */
   openEditForm(keyI) {
-    const index = this.search_elements_index(keyI);
     this.setState({
-      currentI:keyI, 
-      current_element: this.state.elements[index]})
+      current_dash: this.state.dashe[keyI]})
     this.setState({showEditForm:true});
     // store the data of the current element in the EditForm data
-    this.editFormRef.current.setState({data:this.state.elements[index].data})
+    this.editFormRef.current.setState({metaData:this.state.dashes[keyI].metaData})
   }
-
-  /**
-   * Scans for position of the dash in state.layout array
-   * @param {String} keyI: the key of the dash
-   * @returns index in the array or -1 if it is not found
-   */
-  search_layout_index(keyI) {
-    const layout = this.state.layout;
-    const lay = layout.filter( (e) => e.i === keyI);
-    if(lay)
-      return layout.indexOf(lay[0]);
-    else {
-      console.log("failed to find layout with i=", keyI);
-      return -1;
-    }
-  }
-
-  /**
-   * Scans for position of the dash in state.elements array
-   * @param {String} keyI: the key of the dash
-   * @returns index in the array or -1 if it is not found
-   */
-   search_elements_index(keyI) {
-      const elements = this.state.elements;
-      const el = elements.filter( (e) => e.i === keyI);
-      if(el.length) {
-        console.log("Found element ", el);
-        return elements.indexOf(el[0]);
-      }
-      else {
-        console.log("failed to find layout with i=", keyI);
-        return -1;
-      }
-    }
-  
 
   closeEditForm() {
     this.setState({showEditForm:false});
   }
+
 
   /**
    * Modifies the data of the elelent and closes the edit form
    * @param {String} keyI: thkey of the modified dash
    * @param {Array} dat: new data
    */
-  submitForm(keyI, dat) {
-    const index = this.search_elements_index(keyI);
-    console.log("EditForm submitted, index=", index," dat=", dat);
-    let elems = this.state.elements;
-    elems[index].data = dat;
-    this.setState({elements:elems});
+  submitForm(keyI, metaData) {
+    console.log("EditForm submitted, keyI=", keyI," metaData=", metaData);
+    let dashes = this.state.dashes;
+    dashes[keyI].metaData = metaData;
+    dashes[keyI].innerData = this.createInnerData(keyI, dashes[keyI].type, metaData);
+    this.setState({dashes:dashes});
     this.closeEditForm();
   }
+
+  createInnerData(keyI, type, metaData) {
+    console.log("createInnerData:", type, metaData)
+    if(type === "text") {
+      return {text: metaData.text};
+    }
+    else if(type === "image") {
+      return {filePath: metaData.filePath}
+    }
+    else if(type === "plotly") {
+      console.log("Reading plotly inner data from file ", metaData.filePath);
+      fetch(metaData.filePath)
+        .then( r => r.text())
+        .then( t => this.loadPlotly(t, keyI) );
+    }
+  }
+
+
 
   constructor(porps) {
     super(porps);
@@ -111,160 +101,30 @@ export default class SaiDashboard extends React.Component {
     this.print_state = this.print_state.bind(this);
   }
 
-  /**
-   * Parses the text loaded from CSV file and stores it in the plotly dash
-   * @param {String} tableText 
-   * @param {String} keyI 
-   * @param {Array} plotlyType 
-   * @param {Array} plotlyMode 
-   */
-  loadPlotly(tableText, keyI, plotlyType, plotlyMode) {
-    // parsing the text and create plotly data
-    var T = tableText.split("\n");
-    T = T.map( L => L.split(" ").map( (E) => parseInt(E)));
-    T = T.filter(L => L.length >1);
-    var data_ = [{
-      x: T.map( (a) => a[0]),
-      y: T.map( (a) => a[1]),
-      type:plotlyType,
-      mode:plotlyMode
-    }];
-    // save it in the corresponding element and update the state
-    var elements = this.state.elements;
-    var index = this.search_elements_index(keyI);
-    elements[index] = {type:"plotly", data:data_, i:keyI};
-    this.setState({elements:elements});
-    console.log("added plotly", data_)
-  }  
-
-  // Adding a new element (called from AddDashForm)
-  async addElement(event, form_state) {
-    console.log("addElement(",form_state);
-    const type = event.target.name;
-    // Adding new layout record
-    let layout = this.state.layout;
-    let maxI=0;
-    if( layout.length>0) {
-      maxI = Math.max(...layout.map( (el) => parseInt(el.i)))+1;
-    };
-    maxI = maxI.toString();
-    let data_ = "unknown";
-    if(type==="text") {
-      layout = layout.concat({i:maxI, x:0, y:0, w:3, h:1});
-      data_ = form_state.values[type];
-    }
-    else if(type==="image") {
-      layout = layout.concat({i:maxI, x:0, y:0, w:3, h:3});
-      data_ = form_state.values[type];
-    } else if(type === "plotly") {
-      console.log("Adding plotly layout with i=", maxI, 
-        "[elements]=", this.state.elements.length,
-        "[layout]=", this.state.layout.length);
-      layout = layout.concat({i:maxI, x:0, y:0, w:5, h:5});
-      fetch(form_state.values[type].file_name)
-        .then( r => r.text() )
-        .then( t => this.loadPlotly(t, maxI, form_state.values[type].type, form_state.values[type].mode));
-      data_ = [{x:[1,2,3,4,5,6], y:[1,2,3,3,2,1], type:"scatter"}];
-    } else {
-      console.log("Unknown element type ",type);
-      return;
-    };
-    // adding new element record
-    let elements = this.state.elements;
-    elements = elements.concat({type:type, data:data_, i:maxI});
-    // saving the state
-    this.setState({layout: layout, elements:elements}); 
+  componentDidMount() {
+    // filling innerData fields
+    var dashes = this.state.dashes;
+    Object.keys(dashes).map( (k) => {  
+        dashes[k].innerData = this.createInnerData(k, dashes[k].type, dashes[k].metaData);
+      }
+    );
   }
 
-
-  /**
-   * Removes the dash with the given key from the dashboard
-   * @param {String} keyI 
-   */
-  removeElement(keyI) {
-    const index = this.search_layout_index(keyI);
-    console.log("Removing element: i=",keyI, " index=", index);
-    const layout = this.state.layout;
-    const elements = this.state.elements;
-    this.setState({
-        layout: layout.filter( (el, i) => {
-                return i !== index
-            }),
-        elements: elements.filter( (el, i) => {
-                return i !== index
-            }),
-    });
-  }
-
-  /**
-   * Updates the layout state with the change of RGL layout
-   * @param {list} layout 
-   */
-  handleLayoutChange(layout) {
-    this.setState({
-      layout:layout,
-      elements: this.state.elements
-    });
-  }
-
-  /**
-   * Creates list of DOMs of the current elements
-   * @returns list of DOMs
-   */
-  get_elements = () => {
-    const layout = this.state.layout;
-    const elements = this.state.elements;
-    return(
-      elements.map( (el, index) => {
-        return(
-        <div key={el.i}>
-          <SaiDash type={el.type} data={el.data}
-          i={el.i}
-          openEditForm={this.openEditForm}
-          removeElement={this.removeElement}
-          />
-        </div>
-        );
-      })
-    )
-  }
-
-  /**
-   * If the Plotly dash is resized updates the size of the plot
-   * @param {Array} layout 
-   * @param {Array} oldLayoutItem 
-   * @param {Array} layoutItem 
-   * @param  placeholder 
-   */
-  resize_event(layout, oldLayoutItem, layoutItem, placeholder) {
-    console.log("onResize: layoutImem=",layoutItem.i);
-    // console.log("Index:", layout.indexOf(layoutItem));
-    var i=layout.indexOf(layoutItem);
-    if( this.state.elements[i].type === "plotly") {
-      console.log("Resizing Plotly #",i);
-      resize_plotly("gs"+layoutItem.i);
-    }
-  }
-
-  /**
-   * Renders the dashboard
-   * @returns DOM
-   */
   render() {
     return (
       <div>
         <div>
           <button onClick={this.print_state}>Print State</button>
-          <button onClick={(e) => {this.setState({layout:[], elements:[]});}}>
+          <button onClick={(e) => {this.setState({dashes:{}});}}>
             Clear All
           </button>
-          <label>Total #:<span> {this.state.layout.length} , {this.state.elements.length} </span></label>
+          <label>Total #:<span> {Object.keys(this.state.dashes).length} </span></label>
         </div>
       <AddDashForm
         handleAddElement = {this.addElement}/>
       <ReactGridLayout 
         className="layout" 
-        layout={this.state.layout} 
+        layout={this.generate_layout()} 
         cols={12} 
         rowHeight={30} 
         width={1200}
@@ -279,15 +139,131 @@ export default class SaiDashboard extends React.Component {
         isOpen={this.state.showEditForm}
         i={this.state.currentI}
         removeElement = {this.removeElement}
-        element = {this.state.current_element}
+        element = {this.state.current_dash}
         closeEditForm={this.closeEditForm}
         submitForm={this.submitForm}/>
-      <InfoPanel
-        layout = {this.state.layout}
-        elements = {this.state.elements}
-        infoOpened = {this.state.infoOpened}
-        />
       </div>
     );
   }
+
+  get_elements = () => {
+    const dashes = this.state.dashes;
+    return(
+      Object.keys(dashes).map( (k) => {
+        var dash = dashes[k];
+        return(
+          <div key={k}>
+            <SaiDash type={dash.type} i={k} data={dash.innerData}
+              removeElement = {this.removeElement}/>
+            {/* <SaiDash type={dash.type} data={dash.metaData}
+            i={k}
+            openEditForm={this.openEditForm}
+            removeElement={this.removeElement}
+            /> */}
+          </div>
+        );
+      })
+    )
+  }
+
+    /**
+   * Parses the text loaded from CSV file and stores it in the plotly dash
+   * @param {String} tableText 
+   * @param {String} keyI 
+   * @param {Array} plotlyType 
+   * @param {Array} plotlyMode 
+   */
+     loadPlotly(tableText, keyI, plotlyType, plotlyMode) {
+       console.log("Parsing text ", tableText);
+      // parsing the text and create plotly data
+      var T = tableText.split("\n");
+      T = T.map( L => L.split(" ").map( (E) => parseInt(E)));
+      T = T.filter(L => L.length >1);
+      var data_ = [{
+        x: T.map( (a) => a[0]),
+        y: T.map( (a) => a[1])
+      }];
+      // save it in the corresponding element and update the state
+      var dashes = this.state.dashes;
+      dashes[keyI].innerData = {data:data_};
+      this.setState({dashes:dashes});
+      console.log("added plotly", data_)
+      refreshPlotly(keyI, data_);
+
+    }  
+  
+    // Adding a new element (called from AddDashForm)
+    async addElement(event, form_state) {
+      console.log("addElement(",form_state);
+      const type = event.target.name;
+      const dashes = this.state.dashes;
+      // Adding new layout record
+      let maxI=0;
+      if( Object.keys(dashes).length>0) {
+        maxI = Math.max(...Object.keys(dashes).map(K => parseInt(K)))+1;
+      };
+      maxI = maxI.toString();
+      console.log("maxI=", maxI)
+      let metaData = "unknown", layout = {x:0, y:0, w:1, h:1};
+      if( type === "text") {
+        layout = {x:0, y:0, w:3, h:1};
+        metaData = {text:form_state.values["text"]};
+      } else if(type === "image") {
+        layout = {x:0, y:0, w:3, h:3};
+        metaData = {filePath:form_state.values["image"]};
+      } else if(type === "plotly") {
+        layout = {x:0, y:0, w:3, h:3};
+        metaData = form_state.values["plotly"];
+      }
+      dashes[maxI] = {layout:layout, type:type, metaData:metaData, innerData:this.createInnerData(maxI, type, metaData)};
+      this.setState({dashes:dashes});
+    }
+  
+  /**
+   * Removes the dash with the given key from the dashboard
+   * @param {String} keyI 
+   */
+   removeElement(keyI) {
+    console.log("Removing element: i=",keyI);
+    var dashes = this.state.dashes;
+    delete dashes[keyI];
+    this.setState({dashes:dashes});
+  }
+
+    /**
+   * Updates the layout state with the change of RGL layout
+   * @param {list} layout 
+   */
+     handleLayoutChange(layout) {
+       console.log("handleLayoutChange:", layout)
+      var dashes = this.state.dashes;
+      layout.forEach( newLayout => {
+        var keyI = newLayout.i;
+        var L = newLayout;
+        delete L["i"];
+        dashes[keyI].layout = L;  
+      })
+      this.setState({dashes:dashes, layout:layout})
+      }
+  
+
+
+  /**
+   * If the Plotly dash is resized updates the size of the plot
+   * @param {Array} layout 
+   * @param {Array} oldLayoutItem 
+   * @param {Array} layoutItem 
+   * @param  placeholder 
+   */
+   resize_event(layout, oldLayoutItem, layoutItem, placeholder) {
+    console.log("onResize: layoutImem=",layoutItem.i);
+    var keyI = layoutItem.i;
+    this.handleLayoutChange(layout);
+    // plotly graph resizing 
+    if( this.state.dashes[keyI].type === "plotly") {
+      console.log("Resizing Plotly key=",keyI);
+      resize_plotly("gs"+layoutItem.i);
+    }
+  }
+
 }
