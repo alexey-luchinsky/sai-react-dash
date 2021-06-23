@@ -3,9 +3,10 @@ import React from 'react'
 export default class AddDashForm extends React.Component {
     state = {
         values:{
-            "text":"Enter text", 
-            "image":"./bgsu.png", 
-            "plotly":{file_name:"./table.txt", type:"scatter", mode:"markers"}}
+            "text":{text:"Enter text"}, 
+            "image":{filePath:"./bgsu.png"},
+            "plotly":{file_name:"./table.txt", layout:[], mode:[]}
+        }
     };
     constructor(props) {
         super(props);
@@ -14,8 +15,18 @@ export default class AddDashForm extends React.Component {
 
 
     handleChange(event) {
-        let values = this.state.values;
-        values[event.target.name] = event.target.value;
+        let values = this.state.values,
+            type = event.target.name,
+            new_val = event.target.value;
+        if(type === "text") {
+            values[type].text = new_val;
+        }
+        else if(type === "image") {
+            values[type].filePath = new_val;
+        }
+        else if(type === "plotly") {
+            values[type].file_name = new_val;
+        }
         this.setState(values);
     };
     render() {
@@ -26,7 +37,7 @@ export default class AddDashForm extends React.Component {
                         Text:
                         <input type="text"
                         name="text"
-                        value={this.state.values["text"]}
+                        value={this.state.values["text"].text}
                         onChange={this.handleChange}/>
                     </label>
                     <input type="button"
@@ -40,7 +51,7 @@ export default class AddDashForm extends React.Component {
                         Image:
                         <input type="text"
                         name="image"
-                        value={this.state.values["image"]}
+                        value={this.state.values["image"].filePath}
                         onChange={this.handleChange}/>
                     </label>
                     <input type="button"

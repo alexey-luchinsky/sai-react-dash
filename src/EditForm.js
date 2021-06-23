@@ -5,7 +5,7 @@ import {SaiDash} from './SaiDash';
 
 export default class EditForm extends React.Component {
 
-    state={data: this.props.element.data};
+    state={metaData: this.props.element.metaData};
 
     /**
      * create a DOM to edit the text dash
@@ -15,9 +15,33 @@ export default class EditForm extends React.Component {
         return <form>
             <label>
                 Edit Text
-                <input type="text" value={this.state.data} 
+                <input type="text" value={this.state.metaData.text} 
                 onChange={(e) => {
-                    this.setState({data: e.target.value})
+                    this.setState({metaData: {text:e.target.value}});
+                    }}/>
+            </label>
+        </form>
+    }
+
+    editImageForm() {
+        return <form>
+            <label>
+                File path:
+                <input type="text" value={this.state.metaData.filePath} 
+                onChange={(e) => {
+                    this.setState({metaData: {filePath:e.target.value}});
+                    }}/>
+            </label>
+        </form>
+    }
+
+    editPlotlyForm() {
+        return <form>
+            <label>
+                File path:
+                <input type="text" value={this.state.metaData.file_name} 
+                onChange={(e) => {
+                    this.setState({metaData: {file_name:e.target.value, layout:[], mode:[]}});
                     }}/>
             </label>
         </form>
@@ -33,10 +57,18 @@ export default class EditForm extends React.Component {
         let editPane = <div>Element is empty</div> // // content of the edit pane (on the left)
         if(element) {
             // Let us fill the panes depending on element type
-            preview = <SaiDash type={element.type} data={element.data}/>;
+            preview = <SaiDash type={element.type} data={element.innerData}/>;
             if(element.type === "text") {
                 console.log("edit text");
                 editPane = this.editTextForm();
+            }
+            else if(element.type === "image") {
+                console.log("edit image");
+                editPane = this.editImageForm();
+            }
+            else if(element.type === "plotly") {
+                console.log("edit plotly");
+                editPane = this.editPlotlyForm();
             }
             else {
                 editPane = <div>The element type {this.props.element.type} cannot be edited</div>;
@@ -44,7 +76,7 @@ export default class EditForm extends React.Component {
 
         };
         let submitButton = <button 
-            onClick={(e) => {this.props.submitForm(this.props.i, this.state.data)}}> 
+            onClick={(e) => {this.props.submitForm(this.props.element.layout.i, this.state.metaData)}}> 
             Submit 
             </button>;
         let cancelButton = <button onClick={this.props.closeEditForm}>Cancel</button>;
