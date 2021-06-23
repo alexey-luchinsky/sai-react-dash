@@ -204,17 +204,12 @@ export default class SaiDashboard extends React.Component {
       };
       maxI = maxI.toString();
       console.log("maxI=", maxI)
-      let metaData = "unknown", layout = {x:0, y:0, w:1, h:1};
-      if( type === "text") {
-        layout = {x:0, y:0, w:3, h:1};
-        metaData = form_state.values["text"];
-      } else if(type === "image") {
-        layout = {x:0, y:0, w:3, h:3};
-        metaData = form_state.values["image"];
-      } else if(type === "plotly") {
-        layout = {x:0, y:0, w:3, h:3};
-        metaData = form_state.values["plotly"];
-      }
+      let layout = {
+        "text":{x:0, y:0, w:3, h:1},
+        "image":{x:0, y:0, w:3, h:3},
+        "plotly":{x:0, y:0, w:5, h:7}
+      }[type];
+      let metaData = form_state.values[type];
       dashes[maxI] = {layout:layout, type:type, metaData:metaData, innerData:this.createInnerData(maxI, type, metaData)};
       this.setState({dashes:dashes});
     }
