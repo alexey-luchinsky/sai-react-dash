@@ -24,4 +24,6 @@ yarn-error.log*
 package-lock.json
 src/BasicGrid.js
 out/
+public/table.txt
+public/table2.txt
 

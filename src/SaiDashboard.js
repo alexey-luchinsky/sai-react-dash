@@ -86,7 +86,18 @@ export default class SaiDashboard extends React.Component {
     }
   }
 
-
+  
+  /**
+   * Refreshes the dash with keyI
+   * @param {String} keyI 
+   */
+  refreshDash(keyI) {
+    console.log("refreshing dash ", keyI);
+    let dashes = this.state.dashes;
+    let metaData = dashes[keyI].metaData;
+    dashes[keyI].innerData = this.createInnerData(keyI, dashes[keyI].type, metaData);
+    this.setState({dashes:dashes});
+  }
 
   constructor(porps) {
     super(porps);
@@ -99,6 +110,7 @@ export default class SaiDashboard extends React.Component {
     this.closeEditForm = this.closeEditForm.bind(this);
     this.submitForm = this.submitForm.bind(this);
     this.print_state = this.print_state.bind(this);
+    this.refreshDash = this.refreshDash.bind(this);
   }
 
   componentDidMount() {
@@ -119,6 +131,9 @@ export default class SaiDashboard extends React.Component {
             Clear All
           </button>
           <label>Total #:<span> {Object.keys(this.state.dashes).length} </span></label>
+          <button onClick={ (e) =>
+            Object.keys(this.state.dashes).map( (K) => this.refreshDash(K))
+          }>Refresh All</button>
         </div>
       <AddDashForm
         handleAddElement = {this.addElement}/>
