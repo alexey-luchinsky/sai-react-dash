@@ -6,8 +6,6 @@ import {SaiDash} from './SaiDash.js';
 function App() {
   return (
     <div className="App">
-      <h1>Alone</h1>
-      <SaiDash id="first"/>
       <h1> SAI Dashboard</h1>
       <SaiDashboard/>
     </div>
