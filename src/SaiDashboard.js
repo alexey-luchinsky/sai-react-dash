@@ -4,25 +4,30 @@ import AddDashForm from './AddDashForm.js';
 import EditForm from './EditForm.js';
 import RGL, { WidthProvider } from "react-grid-layout";
 import start_dashes from './start_dashes.js';
+import SimpleDash from './dash/SimpleDash.js';
+
 const ReactGridLayout = WidthProvider(RGL);
 
 export default class SaiDashboard extends React.Component {
-  // state = {dashes:{
+  // state = {
+  //  dashes:{
   //          keyI:{layout,type, metaData, innerData},
   //          ...
   //          }
   //    showEditForm
   //    current_dash
-  // ]}
+  //    class_dashes:{keyI:dash object}
+  // }
   // where keyI: i field of the RGD layout
   //        layout: RGD layout without 'i' field
   //        type:   type of the dash ('text', 'image', 'plotly', etc)
   //        metaData: path to image file, path to plotly table, etc. This data can be edited
   //        innerData: the image, table for plotly, etc. This data is generated from metaData
   state = {
-     dashes: start_dashes,
+     dashes: {},
      showEditForm: false,
-     current_dash: {metaData:[]}
+     current_dash: {metaData:[]},
+     class_dashes:{}
   }
 
 
@@ -112,6 +117,8 @@ export default class SaiDashboard extends React.Component {
     this.submitForm = this.submitForm.bind(this);
     this.print_state = this.print_state.bind(this);
     this.refreshDash = this.refreshDash.bind(this);
+    const class_dashes = this.state.class_dashes;
+    class_dashes["5"] = new SimpleDash();
   }
 
   componentDidMount() {
@@ -164,23 +171,22 @@ export default class SaiDashboard extends React.Component {
 
   get_elements = () => {
     const dashes = this.state.dashes;
-    return(
-      Object.keys(dashes).map( (k) => {
+    const dom1 = Object.keys(dashes).map( (k) => {
         var dash = dashes[k];
         return(
           <div key={k}>
             <SaiDash type={dash.type} i={k} data={dash.innerData}
               removeElement = {this.removeElement}
               openEditForm={this.openEditForm}/>
-            {/* <SaiDash type={dash.type} data={dash.metaData}
-            i={k}
-            openEditForm={this.openEditForm}
-            removeElement={this.removeElement}
-            /> */}
           </div>
         );
-      })
-    )
+      });
+      const class_dashes = this.state.class_dashes;
+      const dom2 = Object.keys(class_dashes).map( k => {
+        // console.log("Adding class dash with key", k);
+        return <div key={k}>{class_dashes[k].getDOM()}</div>;
+      });
+      return dom2;
   }
 
     /**
@@ -251,9 +257,11 @@ export default class SaiDashboard extends React.Component {
       var dashes = this.state.dashes;
       layout.forEach( newLayout => {
         var keyI = newLayout.i;
-        var L = newLayout;
-        delete L["i"];
-        dashes[keyI].layout = L;  
+        if(dashes[keyI]) {
+          var L = newLayout;
+          delete L["i"];
+          dashes[keyI].layout = L;  
+        };
       })
       this.setState({dashes:dashes, layout:layout})
       }
