@@ -6,13 +6,20 @@ export default class AddDashForm extends React.Component {
             "text":{text:"Enter text"}, 
             "image":{filePath:"./bgsu.png"},
             "plotly":{file_name:"./table.txt", layout:[], mode:[]}
-        }
+        },
+        display:false
     };
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this);
+        this.toggleDisplay = this.toggleDisplay.bind(this);
+        this.addElement = this.addElement.bind(this);
     };
 
+    addElement(event) {
+        this.props.handleAddElement(event, this.state);
+        this.toggleDisplay();
+    }
 
     handleChange(event) {
         let values = this.state.values,
@@ -29,9 +36,28 @@ export default class AddDashForm extends React.Component {
         }
         this.setState(values);
     };
+
+    /**
+     * converts boolean argument to "block" or "none"
+     * @param {bool} disp 
+     */
+    display_to_string(disp) {
+        return disp ? "block" : "none";
+
+    }
+
+    /**
+     * Toggles the distplay state
+     */
+    toggleDisplay() {
+        this.setState({display: !this.state.display});
+    }
+
     render() {
         return(
             <div>
+                <button onClick={this.toggleDisplay}>Add...</button>
+                <div   style={{display:this.display_to_string(this.state.display)}}>
                 <form>
                     <label>
                         Text:
@@ -43,7 +69,7 @@ export default class AddDashForm extends React.Component {
                     <input type="button"
                      name="text"
                       value="Add Text"
-                       onClick = {(event) => this.props.handleAddElement(event, this.state)}
+                       onClick = {this.addElement}
                     />
                 </form>
                 <form>
@@ -57,7 +83,7 @@ export default class AddDashForm extends React.Component {
                     <input type="button"
                      name="image"
                       value="Add Image"
-                       onClick = {(event) => this.props.handleAddElement(event, this.state)}
+                       onClick = {this.addElement}
                     />
                 </form>
                 <form>
@@ -70,10 +96,10 @@ export default class AddDashForm extends React.Component {
                     <input type="button"
                      name="plotly"
                       value="Add Plotly"
-                       onClick = {(event) => this.props.handleAddElement(event, this.state)}
+                       onClick = {this.addElement}
                     />
                 </form>
-
+            </div>
             </div>
         )
     }
