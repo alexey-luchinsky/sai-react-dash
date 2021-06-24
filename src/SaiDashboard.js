@@ -70,6 +70,7 @@ export default class SaiDashboard extends React.Component {
     this.closeEditForm();
   }
 
+
   createInnerData(keyI, type, metaData) {
     console.log("createInnerData:", type, metaData)
     if(type === "text") {

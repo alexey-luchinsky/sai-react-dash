@@ -6,11 +6,13 @@ export default class AddDashForm extends React.Component {
             "text":{text:"Enter text"}, 
             "image":{filePath:"./bgsu.png"},
             "plotly":{file_name:"./table.txt", layout:[], mode:[]}
-        }
+        },
+        display:false
     };
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this);
+        this.toggleAdd = this.toggleAdd.bind(this);
     };
 
 
@@ -29,9 +31,25 @@ export default class AddDashForm extends React.Component {
         }
         this.setState(values);
     };
+
+    /**
+     * converts boolean argument to "block" or "none"
+     * @param {bool} disp 
+     */
+    display_to_string(disp) {
+        return disp ? "block" : "none";
+
+    }
+
+    toggleAdd() {
+        this.setState({display: !this.state.display});
+    }
+
     render() {
         return(
             <div>
+                <button onClick={this.toggleAdd}>Add...</button>
+                <div   style={{display:this.display_to_string(this.state.display)}}>
                 <form>
                     <label>
                         Text:
@@ -73,7 +91,7 @@ export default class AddDashForm extends React.Component {
                        onClick = {(event) => this.props.handleAddElement(event, this.state)}
                     />
                 </form>
-
+            </div>
             </div>
         )
     }
