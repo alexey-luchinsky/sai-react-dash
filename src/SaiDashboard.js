@@ -93,6 +93,10 @@ export default class SaiDashboard extends React.Component {
    */
   refreshDash(keyI) {
     console.log("refreshing dash ", keyI);
+    let dashes = this.state.dashes;
+    let metaData = dashes[keyI].metaData;
+    dashes[keyI].innerData = this.createInnerData(keyI, dashes[keyI].type, metaData);
+    this.setState({dashes:dashes});
   }
 
   constructor(porps) {
