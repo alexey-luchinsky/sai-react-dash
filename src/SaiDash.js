@@ -24,8 +24,7 @@ class SaiDash extends React.Component {
         const data = this.props.data;
         let content = <span>Unknown dash type {type}, data={data}</span>;
         if(type==="text") {
-            content = <div dangerouslySetInnerHTML={{__html:data.text}}/>;
-//            content = <span>{data.text}</span>;
+            content = <div dangerouslySetInnerHTML={{__html: data.text}}/>;
         } else if(type==="image") {
             content = 
                 <img
