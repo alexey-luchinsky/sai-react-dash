@@ -47,8 +47,16 @@ export default class EditForm extends React.Component {
     }
 
     editPlotlyForm() {
+        const typeOptions = [{value:"scatter", label:"scatter"},{value:"bar", label:"bar"},]
+        const typeSelector = <Select  name="type" options={typeOptions}/>;
+        const modeOptions = [{value:"scatter", label:"scatter"},{value:"bar", label:"bar"},]
+        const modeSelector = <Select  name="mode" options={modeOptions}/>;
         return <form>
             <label>
+                <div>Type</div>
+                {typeSelector}
+                <div>Mode</div>
+                {modeSelector}
                 File path:
                 <input type="text" value={this.state.file_name} 
                 onChange={(e) => {
