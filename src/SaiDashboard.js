@@ -48,7 +48,7 @@ export default class SaiDashboard extends React.Component {
       current_dash: this.state.dashes[keyI]})
     this.setState({showEditForm:true});
     // store the data of the current element in the EditForm data
-    this.editFormRef.current.setState({metaData:this.state.dashes[keyI].metaData})
+    this.editFormRef.current.setState(this.state.dashes[keyI].metaData);
   }
 
   closeEditForm() {
@@ -74,7 +74,18 @@ export default class SaiDashboard extends React.Component {
   createInnerData(keyI, type, metaData) {
     console.log("createInnerData:", type, metaData)
     if(type === "text") {
-      return {text: metaData.text};
+      var style = metaData.style;           
+      if(style === "h1") {
+          return {text:"<h1>" + metaData.text + "</h1>"};
+      } else if(style==="h2") {
+          return  {text:"<h2>" + metaData.text + "</h2>"};
+      } else if(style === "h3") {
+          return {text:"<h3>" + metaData.text + "</h3>"};
+      } else if(style === "html") {
+          return {text:metaData.text};
+      } else {
+          return {text:metaData.text};
+      }
     }
     else if(type === "image") {
       return {filePath: metaData.filePath}
@@ -172,11 +183,6 @@ export default class SaiDashboard extends React.Component {
             <SaiDash type={dash.type} i={k} data={dash.innerData}
               removeElement = {this.removeElement}
               openEditForm={this.openEditForm}/>
-            {/* <SaiDash type={dash.type} data={dash.metaData}
-            i={k}
-            openEditForm={this.openEditForm}
-            removeElement={this.removeElement}
-            /> */}
           </div>
         );
       })

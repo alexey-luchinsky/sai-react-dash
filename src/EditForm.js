@@ -1,24 +1,35 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 import {SaiDash} from './SaiDash';
-
+import Select from "react-select";
 
 export default class EditForm extends React.Component {
 
-    state={metaData: this.props.element.metaData};
+    state=this.props.element;
 
     /**
      * create a DOM to edit the text dash
      * @returns DOM
      */
     editTextForm() {
+        const styles = [
+            {value:'h1', label:"h1"},
+            {value:"h2", label:"h2"},
+            {value:"h3", label:"h3"},
+            {value:"html", label:"html"}
+        ];
+        const styleSelector = <Select options={styles}
+            defaultValue={{value:this.state.style, label: this.state.style}}
+            onChange = {selectedOption => this.setState({style: selectedOption.value})}
+        />;
+
         return <form>
             <label>
-                Edit Text
-                <input type="text" value={this.state.metaData.text} 
-                onChange={(e) => {
-                    this.setState({metaData: {text:e.target.value}});
-                    }}/>
+                {styleSelector}
+                Edit Text: style
+                <input type="text" value={this.state.text} 
+                onChange = {event => this.setState({text: event.target.value})}
+                />
             </label>
         </form>
     }
@@ -27,9 +38,9 @@ export default class EditForm extends React.Component {
         return <form>
             <label>
                 File path:
-                <input type="text" value={this.state.metaData.filePath} 
+                <input type="text" value={this.state.filePath} 
                 onChange={(e) => {
-                    this.setState({metaData: {filePath:e.target.value}});
+                    this.setState({filePath:e.target.value});
                     }}/>
             </label>
         </form>
@@ -39,9 +50,9 @@ export default class EditForm extends React.Component {
         return <form>
             <label>
                 File path:
-                <input type="text" value={this.state.metaData.file_name} 
+                <input type="text" value={this.state.file_name} 
                 onChange={(e) => {
-                    this.setState({metaData: {file_name:e.target.value, layout:[], mode:[]}});
+                    this.setState({file_name:e.target.value, layout:[], mode:[]});
                     }}/>
             </label>
         </form>
@@ -76,7 +87,7 @@ export default class EditForm extends React.Component {
 
         };
         let submitButton = <button 
-            onClick={(e) => {this.props.submitForm(this.props.element.layout.i, this.state.metaData)}}> 
+            onClick={(e) => {this.props.submitForm(this.props.element.layout.i, this.state)}}> 
             Submit 
             </button>;
         let cancelButton = <button onClick={this.props.closeEditForm}>Cancel</button>;
