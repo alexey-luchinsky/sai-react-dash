@@ -19,6 +19,7 @@ export default class EditForm extends React.Component {
             {value:"html", label:"html"}
         ];
         const styleSelector = <Select options={styles}
+        defaultValue={{value:this.state.metaData.style, label: this.state.metaData.style}}
             onChange = {selectedOption => 
                 this.setState({metaData:{
                     style:selectedOption.value, 
