@@ -17,7 +17,7 @@ export default class EditForm extends React.Component {
                 Edit Text
                 <input type="text" value={this.state.metaData.text} 
                 onChange={(e) => {
-                    this.setState({metaData: {text:e.target.value}});
+                    this.setState({metaData: {text:e.target.value, style: this.state.metaData.style}});
                     }}/>
             </label>
         </form>
