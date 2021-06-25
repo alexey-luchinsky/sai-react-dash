@@ -48,7 +48,11 @@ export default class EditForm extends React.Component {
 
     editPlotlyForm() {
         const typeOptions = [{value:"scatter", label:"scatter"},{value:"bar", label:"bar"},]
-        const typeSelector = <Select  name="type" options={typeOptions}/>;
+        const typeSelector = <Select  name="type" 
+            defaultValue={{value:this.state.type, label: this.state.type}}
+            options={typeOptions}
+            onChange = {selectedOption => this.setState({type: selectedOption.value})}
+            />;
         const modeOptions = [{value:"scatter", label:"scatter"},{value:"bar", label:"bar"},]
         const modeSelector = <Select  name="mode" options={modeOptions}/>;
         return <form>
