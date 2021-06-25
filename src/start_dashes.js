@@ -8,7 +8,7 @@ var start_dashes = {
     },
     "2":{
       layout:{x: 2, y: 0, w: 3, h: 7}, type:"plotly", 
-      metaData: {file_name:"./table.txt", type:"scatter", mode:"markers+lines"}, 
+      metaData: {file_name:"./table.txt", type:"bar"}, 
       innerData:[]
     }
 }

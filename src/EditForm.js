@@ -47,7 +47,12 @@ export default class EditForm extends React.Component {
     }
 
     editPlotlyForm() {
-        const typeOptions = [{value:"scatter", label:"scatter"},{value:"bar", label:"bar"},];
+        const typeOptions = [{
+            value:"markers", label:"markers"},
+            {value:"lines", label:"lines"},
+            {value:"markers+lines", label:"markers+lines"},
+            {value:"bar", label:"bar"},
+        ];
         const typeSelector = 
             <div>Type:
                 <ReactSelect  name="type" 
@@ -56,20 +61,9 @@ export default class EditForm extends React.Component {
                     onChange = {selectedOption => this.setState({type: selectedOption.value})}
             />
             </div>;
-        const modeOptions = [
-            {value:"lines", label:"lines"},{value:"markers", label:"markers"},{value:"markers+lines", label:"markers+lines"}
-        ];
-        const modeSelector = <div>Mode:
-            <ReactSelect name="mode"
-                defaultValue={{value:this.state.mode, label: this.state.mode}}
-                options={modeOptions}
-                onChange = {selectedOption => this.setState({mode: selectedOption.value})}
-                />
-            </div>;
         return <form>
             <label>
                 {typeSelector}
-                {modeSelector}
                 File path:
                 <input type="text" value={this.state.file_name} 
                 onChange={(e) => {
