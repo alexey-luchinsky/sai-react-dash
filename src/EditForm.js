@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 import {SaiDash} from './SaiDash';
-
+import Select from "react-select";
 
 export default class EditForm extends React.Component {
 
@@ -12,13 +12,23 @@ export default class EditForm extends React.Component {
      * @returns DOM
      */
     editTextForm() {
+        const styles = [
+            {value:'h1', label:"h1"},
+            {value:"h2", label:"h2"},
+            {value:"h3", label:"h3"},
+            {value:"html", label:"html"}
+        ];
+        const styleSelector = <Select options={styles}
+            onChange = {selectedOption => 
+                this.setState({metaData:{
+                    style:selectedOption.value, 
+                    text:this.state.metaData.text
+                }})}/>;
+
         return <form>
             <label>
+                {styleSelector}
                 Edit Text: style
-                <input type="text" value={this.state.metaData.style}
-                onChange={(e) => {
-                    this.setState({metaData: {text:this.state.metaData.text, style:e.target.value}});
-                    }}/>                
                 <input type="text" value={this.state.metaData.text} 
                 onChange={(e) => {
                     this.setState({metaData: {text:e.target.value, style: this.state.metaData.style}});
