@@ -48,7 +48,7 @@ export default class SaiDashboard extends React.Component {
       current_dash: this.state.dashes[keyI]})
     this.setState({showEditForm:true});
     // store the data of the current element in the EditForm data
-    this.editFormRef.current.setState({metaData:this.state.dashes[keyI].metaData})
+    this.editFormRef.current.setState(this.state.dashes[keyI].metaData);
   }
 
   closeEditForm() {
