@@ -202,12 +202,31 @@ export default class SaiDashboard extends React.Component {
       var T = tableText.split("\n");
       T = T.map( L => L.split(" ").map( (E) => parseInt(E)));
       T = T.filter(L => L.length >1);
+      var dashes = this.state.dashes;
+      let mode="", type="";
+      if(dashes[keyI].metaData.type === "bar") {
+        type = "bar";
+        mode = "";
+      }
+      else if(dashes[keyI].metaData.type === "markers") {
+        type = "scatter";
+        mode = "markers";
+      }
+      else if(dashes[keyI].metaData.type === "lines") {
+        type = "scatter";
+        mode = "lines";
+      }
+      else if(dashes[keyI].metaData.type === "markers+lines") {
+        type = "scatter";
+        mode = "markers+lines";
+      };
       var data_ = [{
         x: T.map( (a) => a[0]),
-        y: T.map( (a) => a[1])
+        y: T.map( (a) => a[1]),
+        mode: mode, 
+        type: type
       }];
       // save it in the corresponding element and update the state
-      var dashes = this.state.dashes;
       dashes[keyI].innerData = {data:data_};
       this.setState({dashes:dashes});
       console.log("added plotly", data_)

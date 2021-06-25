@@ -7,7 +7,9 @@ var start_dashes = {
         metaData:{style:"h1", text:"I am a <b>realy</b> simple dash"}, innerData:[]
     },
     "2":{
-      layout:{x: 2, y: 0, w: 3, h: 7}, type:"plotly", metaData: {file_name:"./table.txt", layout:[], mode:[]}, innerData:[]
+      layout:{x: 2, y: 0, w: 3, h: 7}, type:"plotly", 
+      metaData: {file_name:"./table.txt", type:"bar"}, 
+      innerData:[]
     }
 }
 

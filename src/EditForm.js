@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 import {SaiDash} from './SaiDash';
-import Select from "react-select";
+import ReactSelect from "react-select";
 
 export default class EditForm extends React.Component {
 
@@ -18,7 +18,7 @@ export default class EditForm extends React.Component {
             {value:"h3", label:"h3"},
             {value:"html", label:"html"}
         ];
-        const styleSelector = <Select options={styles}
+        const styleSelector = <ReactSelect options={styles}
             defaultValue={{value:this.state.style, label: this.state.style}}
             onChange = {selectedOption => this.setState({style: selectedOption.value})}
         />;
@@ -47,8 +47,23 @@ export default class EditForm extends React.Component {
     }
 
     editPlotlyForm() {
+        const typeOptions = [{
+            value:"markers", label:"markers"},
+            {value:"lines", label:"lines"},
+            {value:"markers+lines", label:"markers+lines"},
+            {value:"bar", label:"bar"},
+        ];
+        const typeSelector = 
+            <div>Type:
+                <ReactSelect  name="type" 
+                    defaultValue={{value:this.state.type, label: this.state.type}}
+                    options={typeOptions}
+                    onChange = {selectedOption => this.setState({type: selectedOption.value})}
+            />
+            </div>;
         return <form>
             <label>
+                {typeSelector}
                 File path:
                 <input type="text" value={this.state.file_name} 
                 onChange={(e) => {
