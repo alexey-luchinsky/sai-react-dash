@@ -1,11 +1,13 @@
 import React from 'react'
 
 export default class AddDashForm extends React.Component {
+// UPDATE HERE TO INTRODUCE NEW DASH TYPE
     state = {
         values:{
             "text":{text:"Enter text"}, 
             "image":{filePath:"./bgsu.png"},
-            "plotly":{file_name:"./table.txt", layout:[], mode:[]}
+            "plotly":{file_name:"./table.txt", layout:[], mode:[]},
+            "probe": {info:"info"}
         },
         display:false
     };
@@ -21,6 +23,7 @@ export default class AddDashForm extends React.Component {
         this.toggleDisplay();
     }
 
+// UPDATE HERE TO INTRODUCE NEW DASH TYPE
     handleChange(event) {
         let values = this.state.values,
             type = event.target.name,
@@ -33,6 +36,9 @@ export default class AddDashForm extends React.Component {
         }
         else if(type === "plotly") {
             values[type].file_name = new_val;
+        }
+        else if(type === "probe") {
+            values[type].info = new_val;
         }
         this.setState(values);
     };
@@ -99,7 +105,21 @@ export default class AddDashForm extends React.Component {
                        onClick = {this.addElement}
                     />
                 </form>
-            </div>
+ {/* UPDATE HERE TO INTRODUCE NEW DASH TYPE */}
+                <form>
+                    <label>
+                        Probe:
+                        <input type="text" name="probe" 
+                        value={this.state.values["probe"].info} 
+                        onChange={this.handleChange}/>
+                    </label>
+                    <input type="button"
+                     name="probe"
+                      value="Add Probe"
+                       onClick = {this.addElement}
+                    />
+                </form>
+             </div>
             </div>
         )
     }

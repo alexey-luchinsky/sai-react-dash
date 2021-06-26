@@ -3,6 +3,8 @@ import ReactModal from 'react-modal';
 import {SaiDash} from './SaiDash';
 import ReactSelect from "react-select";
 
+
+
 export default class EditForm extends React.Component {
 
     state=this.props.element;
@@ -73,6 +75,14 @@ export default class EditForm extends React.Component {
         </form>
     }
 
+// UPDATE HERE TO INTRODUCE NEW DASH TYPE
+    editProbeForm() {
+        return <form>
+            Info:
+            <input type="text" value={this.state.info} onChange={ (e) => this.setState({info: e.target.value})}/>
+        </form>
+    }
+
     /**
      * creates the React DOM
      * @returns React DOM
@@ -95,6 +105,10 @@ export default class EditForm extends React.Component {
             else if(element.type === "plotly") {
                 console.log("edit plotly");
                 editPane = this.editPlotlyForm();
+            }
+// UPDATE HERE TO INTRODUCE NEW DASH TYPE
+            else if(element.type === "probe") {
+                editPane = this.editProbeForm();
             }
             else {
                 editPane = <div>The element type {this.props.element.type} cannot be edited</div>;

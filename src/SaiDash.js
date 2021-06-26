@@ -20,6 +20,7 @@ class SaiDash extends React.Component {
 
 
     render() {
+// UPDATE HERE TO INTRODUCE NEW DASH TYPE
         const type = this.props.type;
         const data = this.props.data;
         let content = <span>Unknown dash type {type}, data={data}</span>;
@@ -34,6 +35,8 @@ class SaiDash extends React.Component {
         } else if(type === "plotly") {
             var chartID = "gs"+this.props.i;
             content = <div id={chartID}></div>;
+        } else if(type === "probe") {
+            content = <div>probr dash with innerData.info = {data.info}</div>
         };
         return(
             <div 

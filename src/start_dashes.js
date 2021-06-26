@@ -10,7 +10,12 @@ var start_dashes = {
       layout:{x: 2, y: 0, w: 3, h: 7}, type:"plotly", 
       metaData: {file_name:"./table.txt", type:"bar"}, 
       innerData:[]
-    }
+    },
+    "3":{
+      layout:{x: 2, y: 0, w: 1, h: 1}, type:"probe", 
+      metaData: {info:"info"}, 
+      innerData:[]
+    },
 }
 
 export default start_dashes;

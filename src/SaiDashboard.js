@@ -73,6 +73,7 @@ export default class SaiDashboard extends React.Component {
 
   createInnerData(keyI, type, metaData) {
     console.log("createInnerData:", type, metaData)
+// UPDATE HERE TO INTRODUCE NEW DASH TYPE
     if(type === "text") {
       var style = metaData.style;           
       if(style === "h1") {
@@ -90,12 +91,15 @@ export default class SaiDashboard extends React.Component {
     else if(type === "image") {
       return {filePath: metaData.filePath}
     }
+    else if(type === "probe") {
+      return {info: metaData.info};
+    }
     else if(type === "plotly") {
       console.log("Reading plotly inner data from file ", metaData.filePath);
       fetch(metaData.file_name)
         .then( r => r.text())
         .then( t => this.loadPlotly(t, keyI) );
-    }
+    };
   }
 
   
@@ -249,7 +253,9 @@ export default class SaiDashboard extends React.Component {
       let layout = {
         "text":{x:0, y:0, w:3, h:1},
         "image":{x:0, y:0, w:3, h:3},
-        "plotly":{x:0, y:0, w:5, h:7}
+        "plotly":{x:0, y:0, w:5, h:7},
+ // UPDATE HERE TO INTRODUCE NEW DASH TYPE
+        "probe":{x:0, y:0, w:3, h:1},
       }[type];
       let metaData = form_state.values[type];
       dashes[maxI] = {layout:layout, type:type, metaData:metaData, innerData:this.createInnerData(maxI, type, metaData)};
